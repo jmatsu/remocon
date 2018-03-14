@@ -1,0 +1,69 @@
+Bundler/OrderedGems:
+  Exclude:
+    - 'Gemfile'
+
+Layout/ExtraSpacing:
+  Exclude:
+    - 'Rakefile'
+
+Layout/SpaceAroundBlockParameters:
+  Exclude:
+    - 'Rakefile'
+
+Layout/SpaceAroundOperators:
+  Exclude:
+    - 'Rakefile'
+
+Layout/TrailingBlankLines:
+  Exclude:
+    - 'Gemfile'
+
+Layout/TrailingWhitespace:
+  Exclude:
+    - 'Rakefile'
+
+Lint/UselessAssignment:
+  Exclude:
+    - 'Rakefile'
+
+Security/Eval:
+  Exclude:
+    - 'Rakefile'
+
+Style/BlockDelimiters:
+  Exclude:
+    - 'Rakefile'
+
+Style/Documentation:
+  Exclude:
+    - 'spec/**/*'
+    - 'test/**/*'
+    - 'Rakefile'
+
+Style/FrozenStringLiteralComment:
+  Exclude:
+    - 'Gemfile'
+    - 'Rakefile'
+
+Style/HashSyntax:
+  Exclude:
+    - 'Rakefile'
+
+Style/MultilineIfThen:
+  Exclude:
+    - 'Rakefile'
+
+Style/MutableConstant:
+  Exclude:
+    - 'Rakefile'
+
+Style/NestedParenthesizedCalls:
+  Exclude:
+    - 'Gemfile'
+
+Style/StringLiterals:
+  Exclude:
+    - 'Rakefile'
+
+Metrics/LineLength:
+  Max: 150
