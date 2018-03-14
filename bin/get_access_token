@@ -1,0 +1,11 @@
+#!/bin/bash
+
+set -eu
+
+if type easy_install >/dev/null 2>&1; then
+    sudo easy_install --upgrade google-api-python-client
+else
+    sudo pip install --upgrade google-api-python-client
+fi
+
+get_access_token.py

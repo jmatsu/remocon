@@ -1,0 +1,13 @@
+#!/usr/bin/env bash
+
+set -eu
+
+etag_file="$1"
+config_json_file="$2"
+
+curl --compressed \
+    -H "Content-Type: application/json; UTF8" \
+    -H "If-Match: $(cat $etag_file)" \
+    -H "Authorization: Bearer ${REMOTE_CONFIG_ACCESS_TOKEN}" \
+    -X PUT "https://firebaseremoteconfig.googleapis.com/v1/projects/${FIREBASE_PROJECT_ID}/remoteConfig" \
+    -d "@$config_json_file"

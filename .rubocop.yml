@@ -1,69 +1,70 @@
-Bundler/OrderedGems:
+AllCops:
   Exclude:
+    - '*.gemspec'
+    - 'vendor/**/*'
     - 'Gemfile'
-
-Layout/ExtraSpacing:
-  Exclude:
-    - 'Rakefile'
-
-Layout/SpaceAroundBlockParameters:
-  Exclude:
-    - 'Rakefile'
-
-Layout/SpaceAroundOperators:
-  Exclude:
-    - 'Rakefile'
-
-Layout/TrailingBlankLines:
-  Exclude:
-    - 'Gemfile'
-
-Layout/TrailingWhitespace:
-  Exclude:
-    - 'Rakefile'
-
-Lint/UselessAssignment:
-  Exclude:
-    - 'Rakefile'
-
-Security/Eval:
-  Exclude:
-    - 'Rakefile'
-
-Style/BlockDelimiters:
-  Exclude:
     - 'Rakefile'
 
 Style/Documentation:
   Exclude:
     - 'spec/**/*'
     - 'test/**/*'
-    - 'Rakefile'
-
-Style/FrozenStringLiteralComment:
-  Exclude:
-    - 'Gemfile'
-    - 'Rakefile'
-
-Style/HashSyntax:
-  Exclude:
-    - 'Rakefile'
-
-Style/MultilineIfThen:
-  Exclude:
-    - 'Rakefile'
-
-Style/MutableConstant:
-  Exclude:
-    - 'Rakefile'
-
-Style/NestedParenthesizedCalls:
-  Exclude:
-    - 'Gemfile'
-
-Style/StringLiterals:
-  Exclude:
-    - 'Rakefile'
 
 Metrics/LineLength:
   Max: 150
+  Exclude:
+    - "spec/**/*"
+
+Metrics/AbcSize:
+  Enabled: false
+
+Metrics/ClassLength:
+  Enabled: false
+
+Metrics/CyclomaticComplexity:
+  Enabled: false
+
+Metrics/MethodLength:
+  Enabled: false
+
+Metrics/ModuleLength:
+  Enabled: false
+
+Style/BracesAroundHashParameters:
+  Enabled: false
+
+Style/Documentation:
+  Enabled: false
+
+Style/EachWithObject:
+  Enabled: false
+
+Style/LineEndConcatenation:
+  Enabled: false
+
+Style/MutableConstant:
+  Enabled: false
+
+Style/NumericLiterals:
+  Enabled: false
+
+Style/ParallelAssignment:
+  Enabled: false
+
+Style/RedundantSelf:
+  Enabled: false
+
+Style/RegexpLiteral:
+  Enabled: true
+
+Style/StringLiterals:
+  Enabled: false
+
+Style/SymbolProc:
+  Enabled: false
+
+Style/UnneededPercentQ:
+  Enabled: false
+
+Style/PerlBackrefs:
+  Enabled: false

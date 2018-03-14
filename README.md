@@ -1,38 +1,91 @@
-# Firebase::Remote::Config::Manager
+# Remocon
 
-Welcome to your new gem! In this directory, you'll find the files you need to be able to package up your Ruby library into a gem. Put your Ruby code in the file `lib/firebase/remote/config/manager`. To experiment with that code, run `bin/console` for an interactive prompt.
-
-TODO: Delete this and the text above, and describe your gem
-
-## Installation
-
-Add this line to your application's Gemfile:
-
-```ruby
-gem 'firebase-remote-config-manager'
-```
-
-And then execute:
-
-    $ bundle
-
-Or install it yourself as:
-
-    $ gem install firebase-remote-config-manager
+*remocon* is a CLI for Firebase Remote Config via its REST API.  
+Conditions and parameters are managed by YAML files.
 
 ## Usage
 
-TODO: Write usage instructions here
+You need to get an access token for your firebase project.
 
-## Development
+### Get the current configs into your local
 
-After checking out the repo, run `bin/setup` to install dependencies. Then, run `rake spec` to run the tests. You can also run `bin/console` for an interactive prompt that will allow you to experiment.
+```
+# Print the current config (raw json) to your console
+bundle exec remocon pull
 
-To install this gem onto your local machine, run `bundle exec rake install`. To release a new version, update the version number in `version.rb`, and then run `bundle exec rake release`, which will create a git tag for the version, push git commits and tags, and push the `.gem` file to [rubygems.org](https://rubygems.org).
+# Save the current config as YAML files
+bundle exec remocon pull --dest=${path to dir}
+```
+
+### Edit configs on your local
+
+Condition definitions and parameter definitions are separeted.
+
+```
+key1: # key name
+  value: 100 # default value
+  conditions: 
+    condition1:
+      value: 200 # a value to be used if condition1 is satisfied
+    zxczx:
+      file: path_to_file # the file content is used for a value
+```
+
+```
+condition1:
+  name: condition1 # condition name
+  expression: device.os == 'android' # expression
+  tagColor: "INDIGO" # color name
+zxczx:
+  name: zxczx
+  expression: device.os == 'ios'
+  tagColor: CYAN
+```
+
+### Update configs on remote
+
+```
+bundle exec remocon push --source=${path to a json file} --etag=${string or path to a file}
+```
+
+## Installation
+
+```ruby
+gem 'remocon'
+```
+
+## Format
+
+### Parametes
+
+#### Value types
+
+You can use String, Boolean, Integer, Json like below.
+
+```
+key:
+  value: "123"
+  normalizer: "integer"
+
+key:
+  value: "xyz"
+  normalizer: "string"
+
+key:
+  value: true
+  normalizer: "boolean"
+
+key:
+  value: {"x": "y"}
+  normalizer: "json"
+```
+
+### Conditions
+
 
 ## Contributing
 
-Bug reports and pull requests are welcome on GitHub at https://github.com/[USERNAME]/firebase-remote-config-manager.
+Bug reports and pull requests are welcome on GitHub at https://github.com/jmatsu/remocon .
 
 ## License
 
