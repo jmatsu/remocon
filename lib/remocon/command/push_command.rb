@@ -3,12 +3,14 @@
 module Remocon
   module Command
     class Push
+      attr_reader :uri
+
       def initialize(opts)
         @opts = opts
 
         @project_id = ENV.fetch('FIREBASE_PROJECT_ID')
         @token = ENV.fetch('REMOTE_CONFIG_ACCESS_TOKEN')
-        @url = "https://firebaseremoteconfig.googleapis.com/v1/projects/#{@project_id}/remoteConfig"
+        @uri = URI.parse("https://firebaseremoteconfig.googleapis.com/v1/projects/#{@project_id}/remoteConfig")
         @source_filepath = @opts[:source]
         @etag = File.exist?(@opts[:etag]) ? File.open(@opts[:etag]).read : @opts[:etag] if @opts[:etag]
         @ignore_etag = @opts[:force]
@@ -18,32 +20,42 @@ module Remocon
       end
 
       def run
-        raise 'etag should be specified. If you want to ignore this error, then add --force option' unless @etag || @ignore_etag
-
-        inspect_response(push)
+        # to prevent a real request in spec
+        do_request
       end
 
-      private
+      def client
+        return @client if @client
 
-      def push
+        client = Net::HTTP.new(uri.host, uri.port)
+        client.use_ssl = true
+
+        @client = client
+      end
+
+      def request
+        return @request if @request
+
+        raise 'etag should be specified. If you want to ignore this error, then add --force option' unless @etag || @ignore_etag
+
         headers = {
           'Authorization' => "Bearer #{@token}",
           'Content-Type' => 'application/json; UTF8'
         }
         headers['If-Match'] = @etag || '*'
 
-        uri = URI.parse(@url)
         request = Net::HTTP::Put.new(uri.request_uri, headers)
         request.body = ""
         request.body << File.read(@source_filepath).delete("\r\n")
 
-        client = Net::HTTP.new(uri.host, uri.port)
-        client.use_ssl = true
-
-        inspect_response(client.request(request))
+        @request = request
       end
 
-      def inspect_response(response)
+      private
+
+      def do_request
+        response = client.request(request)
+
         response_body = begin
           json_str = response&.read_body
           JSON.parse(json_str).with_indifferent_access if json_str
