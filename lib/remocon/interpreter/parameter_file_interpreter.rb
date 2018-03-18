@@ -9,7 +9,7 @@ module Remocon
     def read(condition_names, opts = {})
       errors = []
       json_hash = @yaml.each_with_object({}) do |(key, body), hash|
-        raise Remocon::ValidationError, "#{key} is duplicated" if hash[key]
+        raise Remocon::DuplicateKeyError, "#{key} is duplicated" if hash[key]
 
         hash[key] = {
           defaultValue: {
@@ -18,7 +18,7 @@ module Remocon
         }
 
         hash[key][:conditionalValues] = parse_condition_body(condition_names, key, body[:conditions]) if body[:conditions]
-        hash[key][:description] = body[:description]
+        hash[key][:description] = body[:description] if body[:description]
       rescue Remocon::ValidationError => e
         raise e unless opts[:validate_only]
         errors.push(e)
@@ -36,7 +36,11 @@ module Remocon
     def parse_value_body(key, value_body)
       case value_body
       when Hash
-        TypeNormalizerFactory.get(value_body[:normalizer]).new({ key: key }.merge(value_body[:options] || {})).process(read_value(value_body)).content
+        value = read_value(value_body)
+        options = { key: key }.merge(value_body[:options] || {})
+        normalizer = TypeNormalizerFactory.get(value_body[:normalizer]).new(value, options)
+        normalizer.process
+        normalizer.content
       else # includes Array
         # use raw value
         value_body
@@ -45,7 +49,7 @@ module Remocon
 
     def parse_condition_body(condition_names, key, condition_body)
       condition_body.each_with_object({}) do |(cond_key, body), hash|
-        raise Remocon::ValidationError, "The condition '#{cond_key}' is not defined or has no rules" unless condition_names.include?(cond_key.to_s)
+        raise Remocon::NotFoundConditionKey, "The condition '#{cond_key}' is not defined" unless condition_names.include?(cond_key.to_s)
 
         hash[cond_key] = {
           value: parse_value_body(key, body)

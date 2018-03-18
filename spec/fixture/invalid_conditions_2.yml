@@ -1,0 +1,11 @@
+---
+- expression: device.os == 'ios' #name is missing
+  tagColor: INDIGO
+- name: zxczx # expression is missing
+  tagColor: CYAN
+- name: condition2
+  expression: device.os == 'ios'
+  tagColor: INDIGO
+- name: condition2 # dup
+  expression: device.os == 'ios'
+  tagColor: CYAN

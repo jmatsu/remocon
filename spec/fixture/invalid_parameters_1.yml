@@ -1,0 +1,17 @@
+---
+key1:
+  value: '100'
+  conditions:
+    condition1:
+      value: '200'
+    zxczx:
+      value: '100'
+key6:
+  value: '{"value":"xxxx"}'
+key6:
+  value: '{"value":"xx234234xx"}'
+key7:
+  value: '{"x1":"x1","x2":"x2"}'
+  conditions:
+    condition2: # missing
+      value: '200'

@@ -4,13 +4,12 @@ module Remocon
   class Normalizer
     attr_reader :content
 
-    def initialize(opts)
+    def initialize(content, opts)
+      @content = content.nil? ? opts[:default] : content
       @opts = opts
     end
 
-    def process(content)
-      @content = content.nil? ? @opts[:default] : content
-
+    def process
       tap do
         raise Remocon::ValidationError, "#{self.class} is not satisfying normalizer" unless self.class.respond_symbol
 

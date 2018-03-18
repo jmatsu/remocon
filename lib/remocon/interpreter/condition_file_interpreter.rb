@@ -11,13 +11,14 @@ module Remocon
 
     def read(opts = {})
       errors = []
-      json_array = @yaml.clone
+      json_array = @yaml.dup
 
       keys = []
 
       @yaml.each do |hash|
-        raise Remocon::ValidationError, "#{hash[:name]} is duplicated" if keys.include?(hash[:name])
-        raise Remocon::ValidationError, 'expression must not be empty' unless hash[:expression]
+        raise Remocon::EmptyNameError, 'name must not be empty' unless hash[:name]
+        raise Remocon::EmptyExpressionError, 'expression must not be empty' unless hash[:expression]
+        raise Remocon::DuplicateKeyError, "#{hash[:name]} is duplicated" if keys.include?(hash[:name])
 
         keys.push(hash[:name])
       rescue Remocon::ValidationError => e

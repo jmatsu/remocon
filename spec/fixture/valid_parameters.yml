@@ -1,0 +1,10 @@
+---
+key1:
+  value: '100'
+  conditions:
+    condition1:
+      value: '200'
+    zxczx:
+      value: '100'
+key2:
+  value: '123'
