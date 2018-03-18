@@ -4,33 +4,99 @@ require "spec_helper"
 
 module Remocon
   describe ParameterSorter do
+    let(:sorter) { Struct.new(:dummy) { include Remocon::ParameterSorter }.new }
     let(:target) do
-      [
-        nil,
-        :a,
-        "remain",
-        123,
-        nil,
-        {
-          c: nil,
-          d: "remain"
+      {
+        key1: {
+          value: "value",
+          conditions: {
+            "cond1" => {
+              value: "cond1 value"
+            },
+            "cond2" => {
+              value: "cond2 value"
+            }
+          },
+          normalizer: 'json',
+          description: 'example example example',
+          options: {
+            option2: 'option2',
+            option3: 'option3',
+            option1: 'option1'
+          }
+        },
+        key2: {
+          description: 'example example example',
+          normalizer: 'json',
+          value: "value"
+        },
+        key3: {
+          file: "file",
+          description: 'example example example',
+          normalizer: 'json',
+          conditions: {
+            "cond2" => {
+              value: "cond2 value"
+            },
+            "cond1" => {
+              value: "cond1 value"
+            }
+          },
+          options: {
+            option3: 'option3',
+            option2: 'option2',
+            option1: 'option1'
+          }
         }
-      ]
+      }
     end
 
-    context '#stringify_values' do
-      it 'should have only string values' do
-        expect(target.stringify_values).to eq([
-                                                "",
-                                                "a",
-                                                "remain",
-                                                "123",
-                                                "",
-                                                {
-                                                  c: "",
-                                                  d: "remain"
-                                                }
-                                              ])
+    context '#sort_parameters' do
+      it 'should sort' do
+        expect(sorter.sort_parameters(target)).to eq({
+          key1: {
+            description: 'example example example',
+            value: "value",
+            normalizer: 'json',
+            conditions: {
+              "cond1" => {
+                value: "cond1 value"
+              },
+              "cond2" => {
+                value: "cond2 value"
+              }
+            },
+            options: {
+              option2: 'option2',
+              option3: 'option3',
+              option1: 'option1'
+            }
+          },
+          key2: {
+            description: 'example example example',
+            value: "value",
+            normalizer: 'json'
+          },
+          key3: {
+            description: 'example example example',
+            file: "file",
+            normalizer: 'json',
+            conditions: {
+              "cond1" => {
+                value: "cond1 value"
+              },
+              "cond2" => {
+                value: "cond2 value"
+              }
+            },
+            options: {
+              option3: 'option3',
+              option2: 'option2',
+              option1: 'option1'
+            }
+          }
+
+        }.deep_stringify_keys)
       end
     end
   end

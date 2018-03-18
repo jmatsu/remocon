@@ -6,8 +6,8 @@ module Remocon
 
     def sort_conditions(conditions)
       conditions
-            .sort_by { |e| e[:name] }
-            .map do |e|
+        .sort_by { |e| e[:name] }
+        .map do |e|
         arr = e.sort do |(a, _), (b, _)|
           if !CONDITION_KEYS.include?(a) && !CONDITION_KEYS.include?(b)
             a <=> b

@@ -6,10 +6,15 @@ module Remocon
 
     def sort_parameters(parameters)
       arr = parameters.sort.map do |k, v|
+        hash_arr = v.sort { |(a, _), (b, _)| PARAMETER_KEYS.index(a) <=> PARAMETER_KEYS.index(b) }
+                    .map do |k, v|
+          {
+            k => k.to_sym == :conditions ? sort_parameters(v) : v
+          }
+        end
+
         {
-          k => v.sort { |(a, _), (b, _)| PARAMETER_KEYS.index(a) <=> PARAMETER_KEYS.index(b) }
-                .map { |k, v| { k => %i[conditions options].include?(k.to_sym) ? sort_parameters(v) : v } }
-                .each_with_object({}) { |hash, acc| acc.merge!(hash) }
+          k => hash_arr.each_with_object({}) { |hash, acc| acc.merge!(hash) }
         }
       end
 

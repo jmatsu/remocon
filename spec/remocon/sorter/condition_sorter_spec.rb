@@ -39,7 +39,7 @@ module Remocon
     end
 
     context '#sort_conditions' do
-      it 'should have only string values' do
+      it 'should sort by official keys and custom keys desc' do
         expect(sorter.sort_conditions(target)).to eq([
           {
             name: 'name1',

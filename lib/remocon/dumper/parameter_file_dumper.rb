@@ -3,7 +3,7 @@
 module Remocon
   class ParameterFileDumper
     def initialize(parameters)
-      @parameters = parameters
+      @parameters = parameters.with_indifferent_access
     end
 
     def dump
