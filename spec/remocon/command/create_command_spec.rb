@@ -7,10 +7,6 @@ module Remocon
     describe Create do
       let(:command) { Create.new(options) }
 
-      before do
-        ENV['FIREBASE_PROJECT_ID'] = 'xxxxx'
-      end
-
       context 'a parameters file is not found' do
         let(:options) do
           {

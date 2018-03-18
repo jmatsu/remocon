@@ -67,3 +67,6 @@ end
 def config_json
   JSON.parse(File.open(fixture_path('config.json')).read).with_indifferent_access
 end
+
+ENV['FIREBASE_PROJECT_ID'] = 'project_id'
+ENV['REMOTE_CONFIG_ACCESS_TOKEN'] = 'token'
