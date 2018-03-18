@@ -63,3 +63,7 @@ def valid_conditions
   JSON
             ).map(&:with_indifferent_access)
 end
+
+def config_json
+  JSON.parse(File.open(fixture_path('config.json')).read).with_indifferent_access
+end

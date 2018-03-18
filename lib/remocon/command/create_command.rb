@@ -22,17 +22,19 @@ module Remocon
         artifact = {
           conditions: condition_array,
           parameters: parameter_hash
-        }
+        }.skip_nil_values.stringify_values
 
         if @dest_dir
           File.open(File.join(@dest_dir, 'config.json'), 'w+') do |f|
             # remote config allows only string values ;(
-            f.write(JSON.pretty_generate(artifact.skip_nil_values.stringify_values))
+            f.write(JSON.pretty_generate(artifact))
             f.flush
           end
         else
-          STDOUT.puts JSON.pretty_generate(artifact.skip_nil_values)
+          STDOUT.puts JSON.pretty_generate(artifact)
         end
+
+        artifact
       end
 
       private
