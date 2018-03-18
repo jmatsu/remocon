@@ -3,48 +3,55 @@
 *remocon* is a CLI for Firebase Remote Config via its REST API.  
 Conditions and parameters are managed by YAML files.
 
+*This is still in beta. A diff mode should be supported when managing configs heavily.*
+
 ## Usage
 
 You need to get an access token for your firebase project.
 
+```bash
+export FIREBASE_PROJECT_ID='your project id'
+export REMOTE_CONFIG_ACCESS_TOKEN='your access token'
+```
+
 ### Get the current configs into your local
 
-```
-# Print the current config (raw json) to your console
-bundle exec remocon pull
-
-# Save the current config as YAML files
+```bash
 bundle exec remocon pull --dest=${path to dir}
+
+# you can see ${path to dir}/${FIREBASE_PROJECT_ID}/{paremeters.yml, conditions.yml, config.json, etag}
 ```
 
 ### Edit configs on your local
 
-Condition definitions and parameter definitions are separeted.
+Condition definitions and parameter definitions are separated. You should modify these files.
 
-```
+*parameters.yml*
+
+```yaml
 key1: # key name
   value: 100 # default value
   conditions: 
     condition1:
       value: 200 # a value to be used if condition1 is satisfied
-    zxczx:
-      file: path_to_file # the file content is used for a value
+    condition2:
+      file: path_to_file # you can use file content. the file content is used for a value
 ```
 
-```
-condition1:
-  name: condition1 # condition name
+*conditions.yml*
+
+```yaml
+- name: condition1 # condition name
   expression: device.os == 'android' # expression
   tagColor: "INDIGO" # color name
-zxczx:
-  name: zxczx
+- name: condition2
   expression: device.os == 'ios'
   tagColor: CYAN
 ```
 
 ### Update configs on remote
 
-```
+```bash
 bundle exec remocon push --source=${path to a json file} --etag=${string or path to a file}
 ```
 
@@ -56,32 +63,24 @@ gem 'remocon'
 
 ## Format
 
-### Parametes
+### Parameters
 
-#### Value types
+You can use String, Boolean, Integer, Json validators like below.
 
-You can use String, Boolean, Integer, Json like below.
-
-```
+```yaml
 key:
-  value: "123"
-  normalizer: "integer"
-
-key:
-  value: "xyz"
-  normalizer: "string"
-
-key:
-  value: true
-  normalizer: "boolean"
-
-key:
-  value: {"x": "y"}
-  normalizer: "json"
+  value: # optional (either of this or file is required). Raw value and hash are allowed.
+  file: # optional (either of this or value is required). File content value.
+  normalizer: # optional. Either of ["integer", "string", "boolean", "json", "void"] (default: void).
+  conditions: # optional. If you want use conditional values, then you need to create this section.
+    condition_name: # must be in condition definitions.
+      value: ...
+      file: ...
 ```
 
 ### Conditions
 
+It seems only three fields are supported by Remote Config. They are name, expression and tagColor.
 
 ## Contributing
 
