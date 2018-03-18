@@ -6,11 +6,17 @@ module Remocon
 
     def sort_conditions(conditions)
       conditions
-        .sort_by { |e| e[:name] }
-        .map do |e|
-        e.sort { |(a, _), (b, _)| CONDITION_KEYS.index(a) <=> CONDITION_KEYS.index(b) }
-         .each_with_object({}) { |(k, v), h| h[k] = v }
-         .with_indifferent_access
+            .sort_by { |e| e[:name] }
+            .map do |e|
+        arr = e.sort do |(a, _), (b, _)|
+          if !CONDITION_KEYS.include?(a) && !CONDITION_KEYS.include?(b)
+            a <=> b
+          else
+            (CONDITION_KEYS.index(a) || 10000) <=> (CONDITION_KEYS.index(b) || 10000)
+          end
+        end
+
+        arr.each_with_object({}) { |(k, v), h| h[k] = v }.with_indifferent_access
       end
     end
   end

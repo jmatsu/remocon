@@ -20,7 +20,7 @@ class Hash
       if v.is_a?(Hash)
         v.stringify_values
       elsif v.is_a?(Array)
-        v.map(&:stringify_values)
+        v.stringify_values
       else
         v.to_s
       end

@@ -1,11 +1,11 @@
 # frozen_string_literal: true
 
-RSpec.describe Remocon do
-  it 'has a version number' do
-    expect(Remocon::VERSION).not_to be nil
-  end
+require "spec_helper"
 
-  it 'does something useful' do
-    expect(false).to eq(true)
+module Remocon
+  describe VERSION do
+    it 'has a version number' do
+      expect(Remocon::VERSION).not_to be nil
+    end
   end
 end
