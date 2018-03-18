@@ -45,5 +45,3 @@ require 'remocon/command/push_command'
 require 'remocon/command/validate_command'
 
 require 'remocon/cli'
-
-require 'pry' if ENV['DEBUG']
