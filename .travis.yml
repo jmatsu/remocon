@@ -3,3 +3,7 @@ language: ruby
 rvm:
   - 2.5.0
 before_install: gem install bundler -v 1.16.1
+install: bundle install --deployment --jobs=4 --retry=3
+cache:
+  directories: vendor/bundle
+script: bundle exec rake spec
