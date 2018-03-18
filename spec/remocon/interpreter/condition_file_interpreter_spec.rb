@@ -13,23 +13,7 @@ module Remocon
         it 'should return expected array' do
           conditions, = interpreter.read
 
-          expect(conditions).to eq(
-            JSON.parse(<<~JSON
-              [
-                {
-                  "name":"condition1",
-                  "expression":"device.os == 'ios'",
-                  "tagColor":"INDIGO"
-                },
-                {
-                  "name":"zxczx",
-                  "expression":"device.os == 'ios'",
-                  "tagColor":"CYAN"
-                }
-              ]
-            JSON
-                      )
-          )
+          expect(conditions).to eq(valid_conditions)
         end
 
         it 'should return no errors' do

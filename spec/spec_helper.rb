@@ -19,3 +19,47 @@ end
 def fixture_path(fixture_name)
   File.join(File.dirname(__FILE__), "fixture", fixture_name)
 end
+
+def valid_parameters
+  JSON.parse(<<~JSON
+    {
+      "key1": {
+        "defaultValue": {
+          "value": "100"
+        },
+        "conditionalValues": {
+          "condition1": {
+            "value": "200"
+          },
+          "zxczx": {
+            "value": "100"
+          }
+        }
+      },
+      "key2": {
+        "defaultValue": {
+          "value": "123"
+        }
+      }
+    }
+  JSON
+            ).with_indifferent_access
+end
+
+def valid_conditions
+  JSON.parse(<<~JSON
+    [
+      {
+        "name":"condition1",
+        "expression":"device.os == 'ios'",
+        "tagColor":"INDIGO"
+      },
+      {
+        "name":"zxczx",
+        "expression":"device.os == 'ios'",
+        "tagColor":"CYAN"
+      }
+    ]
+  JSON
+            ).map(&:with_indifferent_access)
+end

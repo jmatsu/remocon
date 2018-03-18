@@ -14,31 +14,7 @@ module Remocon
         it 'should return expected hash' do
           conditions, = interpreter.read(condition_names)
 
-          expect(conditions).to eq(
-            JSON.parse(<<~JSON
-              {
-                "key1": {
-                  "defaultValue": {
-                    "value": "100"
-                  },
-                  "conditionalValues": {
-                    "condition1": {
-                      "value": "200"
-                    },
-                    "zxczx": {
-                      "value": "100"
-                    }
-                  }
-                },
-                "key2": {
-                  "defaultValue": {
-                    "value": "123"
-                  }
-                }
-              }
-            JSON
-                      )
-          )
+          expect(conditions).to eq(valid_parameters)
         end
 
         it 'should return no errors' do

@@ -37,6 +37,7 @@ module Remocon
       ]
     end
 
+    # this feature is a prototype so it's okay to add ignore marker if this fails
     context '#register' do
       it 'should return as it is' do
         expect(TypeNormalizerFactory.get(:dummy)).to eq(nil)
