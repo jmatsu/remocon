@@ -2,6 +2,8 @@ PATH
   remote: .
   specs:
     remocon (0.1.0)
+      activesupport
+      thor
 
 GEM
   remote: https://rubygems.org/
@@ -59,14 +61,12 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
-  activesupport
   bundler (~> 1.16)
   pry
   rake (~> 10.0)
   remocon!
   rspec (~> 3.0)
   rubocop
-  thor
 
 BUNDLED WITH
    1.16.1
