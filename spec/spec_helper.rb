@@ -75,4 +75,3 @@ end
 def config_json
   JSON.parse(File.open(fixture_path("config_file.json")).read).with_indifferent_access
 end
-

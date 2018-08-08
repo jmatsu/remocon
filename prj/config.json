@@ -1,0 +1,34 @@
+{
+  "conditions": [
+    {
+      "expression": "device.os == 'ios'",
+      "name": "condition1",
+      "tagColor": "INDIGO"
+    },
+    {
+      "expression": "device.os == 'ios'",
+      "name": "zxczx",
+      "tagColor": "CYAN"
+    }
+  ],
+  "parameters": {
+    "key1": {
+      "defaultValue": {
+        "value": "100"
+      },
+      "conditionalValues": {
+        "condition1": {
+          "value": "200"
+        },
+        "zxczx": {
+          "value": "100"
+        }
+      }
+    },
+    "key2": {
+      "defaultValue": {
+        "value": "123"
+      }
+    }
+  }
+}

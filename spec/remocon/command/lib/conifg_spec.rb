@@ -244,7 +244,7 @@ module Remocon
         end
 
         it "should raise an error if both are specified" do
-          opts.merge!(force: true)
+          opts[:force] = true
 
           expect { config.etag }.to raise_error(StandardError)
         end
@@ -258,7 +258,7 @@ module Remocon
         end
 
         it "should return * if forced" do
-          opts.merge!(force: true)
+          opts[:force] = true
 
           expect(config.etag).to eq("*")
         end
@@ -272,7 +272,7 @@ module Remocon
         end
 
         it "should return * if forced" do
-          opts.merge!(force: true)
+          opts[:force] = true
 
           expect(config.etag).to eq("*")
         end

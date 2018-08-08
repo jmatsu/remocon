@@ -39,9 +39,9 @@ module Remocon
     def project_dir_path
       @project_dir_path ||= begin
         dir_path = destination_dir_path
-        (dir_path ? File.join(dir_path, project_id) : project_id).tap { |dir|
+        (dir_path ? File.join(dir_path, project_id) : project_id).tap do |dir|
           FileUtils.mkdir_p(dir)
-        }
+        end
       end
     end
 
