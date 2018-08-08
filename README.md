@@ -82,6 +82,10 @@ key:
 
 It seems only three fields are supported by Remote Config. They are name, expression and tagColor.
 
+## Supported Ruby Version 
+
+Not EOL versions. ref https://www.ruby-lang.org/en/downloads/branches/
+
 ## Contributing
 
 Bug reports and pull requests are welcome on GitHub at https://github.com/jmatsu/remocon .

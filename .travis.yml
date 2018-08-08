@@ -1,13 +1,18 @@
 sudo: false
 language: ruby
+
+cache:
+  directories: vendor/bundle
+
 rvm:
-  - 2.5.0
+  - 2.3.7
+  - 2.4.4
+  - 2.5.1
+
 env:
   global:
     - FIREBASE_PROJECT_ID='project_id'
     - REMOTE_CONFIG_ACCESS_TOKEN='token'
 before_install: gem install bundler -v 1.16.1
-install: bundle install --deployment --jobs=4 --retry=3
-cache:
-  directories: vendor/bundle
+install: bundle install --deployment --jobs=4 --retry=3 --path=vendor/bundle
 script: bundle exec rake spec
