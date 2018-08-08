@@ -5,7 +5,7 @@ module Remocon
     REMOCON_PROJECT_ID_KEY = "REMOCON_FIREBASE_PROJECT_ID"
     REMOCON_ACCESS_TOKEN = "REMOCON_FIREBASE_ACCESS_TOKEN"
 
-    REMOCON_DESTINATION_DIR_KEY = "REMOCON_DESTINATION_PATH"
+    REMOCON_PREFIX_KEY = "REMOCON_PREFIX"
 
     CONFIG_JSON_FILE = "config.json"
     CONDITIONS_FILE_NAME = "conditions.yml"
@@ -33,7 +33,7 @@ module Remocon
     end
 
     def destination_dir_path
-      @destination_dir_path ||= (opts[:prefix] || opts[:dest] || ENV[REMOCON_DESTINATION_DIR_KEY])
+      @destination_dir_path ||= (opts[:prefix] || opts[:dest] || ENV[REMOCON_PREFIX_KEY])
     end
 
     def project_dir_path

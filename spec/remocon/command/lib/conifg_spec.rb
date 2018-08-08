@@ -97,7 +97,7 @@ module Remocon
         end
 
         it "should return an opt value even if env exists" do
-          ENV[Remocon::Config::REMOCON_DESTINATION_DIR_KEY] = "yyyy"
+          ENV[Remocon::Config::REMOCON_PREFIX_KEY] = "yyyy"
 
           expect(config.destination_dir_path).to eq("x")
         end
@@ -110,7 +110,7 @@ module Remocon
         end
 
         it "should return an opt value even if env exists" do
-          ENV[Remocon::Config::REMOCON_DESTINATION_DIR_KEY] = "yyyy"
+          ENV[Remocon::Config::REMOCON_PREFIX_KEY] = "yyyy"
 
           expect(config.destination_dir_path).to eq("x")
         end
@@ -120,7 +120,7 @@ module Remocon
         let(:opts) { {} }
 
         it "should return a complete endpoint" do
-          ENV[Remocon::Config::REMOCON_DESTINATION_DIR_KEY] = "yyyy"
+          ENV[Remocon::Config::REMOCON_PREFIX_KEY] = "yyyy"
 
           expect(config.destination_dir_path).to eq("yyyy")
         end

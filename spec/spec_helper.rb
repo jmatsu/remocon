@@ -18,7 +18,7 @@ RSpec.configure do |config|
   config.before(:each) do
     ENV[Remocon::Config::REMOCON_PROJECT_ID_KEY] = nil
     ENV[Remocon::Config::REMOCON_ACCESS_TOKEN] = nil
-    ENV[Remocon::Config::REMOCON_DESTINATION_DIR_KEY] = nil
+    ENV[Remocon::Config::REMOCON_PREFIX_KEY] = nil
     ENV["FIREBASE_PROJECT_ID"] = nil
     ENV["REMOTE_CONFIG_ACCESS_TOKEN"] = nil
   end
