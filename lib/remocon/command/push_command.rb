@@ -3,10 +3,7 @@
 module Remocon
   module Command
     class Push
-
       attr_reader :config, :cmd_opts
-
-      attr_reader :uri
 
       def initialize(opts)
         @config = Remocon::Config.new(opts)
@@ -16,10 +13,6 @@ module Remocon
       def run
         # to prevent a real request in spec
         do_request
-      end
-
-      def uri
-        @uri ||= URI.parse(config.endpoint)
       end
 
       def client
@@ -51,6 +44,10 @@ module Remocon
 
       private
 
+      def uri
+        @uri ||= URI.parse(config.endpoint)
+      end
+
       def do_request
         response = client.request(request)
 
@@ -77,11 +74,9 @@ module Remocon
         when Net::HTTPConflict
           # local content is out-to-date
           STDERR.puts "409 Conflict. Remote was updated. Please update your local files"
-          else
-            # do nothing
         end
 
-        response.is_a?(Net::HTTPOK)
+        response.kind_of?(Net::HTTPOK)
       end
 
       def parse_success_body(response, _success_body)
