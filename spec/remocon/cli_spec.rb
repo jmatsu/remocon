@@ -6,10 +6,12 @@ module Remocon
   describe CLI do
     context "commands" do
       shared_examples "CLI examples" do
-        it "should run a command" do
+        before do
           # disable running
-          allow(klass).to receive(:run)
+          allow_any_instance_of(klass).to receive(:run).and_return(true)
+        end
 
+        it "should run a command" do
           expect_any_instance_of(klass).to receive(:run).once
           described_class.new.invoke(command, [], options)
         end

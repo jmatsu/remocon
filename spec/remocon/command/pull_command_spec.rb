@@ -5,7 +5,7 @@ require "spec_helper"
 module Remocon
   module Command
     describe Pull do
-      let(:command) { Pull.new({}) }
+      let(:command) { Pull.new({ token: "xyz", id: "dragon" }) }
 
       before do
         allow(command).to receive(:open)
@@ -13,11 +13,11 @@ module Remocon
 
       context "#run" do
         it "should request with GET to a correct url" do
-          expect(command).to receive(:open).with("https://firebaseremoteconfig.googleapis.com/v1/projects/project_id/remoteConfig", {
-                                                   "Authorization" => "Bearer token"
+          expect(command).to receive(:open).with("https://firebaseremoteconfig.googleapis.com/v1/projects/dragon/remoteConfig", {
+                                                   "Authorization" => "Bearer xyz"
                                                  })
 
-          command.run
+          command.send("do_request")
         end
       end
     end

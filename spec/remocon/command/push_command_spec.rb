@@ -8,7 +8,9 @@ module Remocon
       let(:command) { Push.new(options) }
       let(:base_options) do
         {
-          source: fixture_path("config.json")
+          source: fixture_path("config_file.json"),
+          token: "xyz",
+          id: "dragon",
         }
       end
 
@@ -24,6 +26,13 @@ module Remocon
             expect { command.request }.to raise_error(StandardError)
           end
         end
+        context "a etag file is provided but not found" do
+          let(:options) { base_options.merge({ etag: "etag" }) }
+
+          it "should raise an error without force option" do
+            expect { command.request }.to raise_error(StandardError)
+          end
+        end
 
         context "a etag is not provided but force option is provided" do
           let(:options) { base_options.merge({ force: true }) }
@@ -33,16 +42,16 @@ module Remocon
           end
         end
 
-        context "a etag is provided" do
-          let(:options) { base_options.merge({ etag: "etag" }) }
+        context "a raw etag is provided" do
+          let(:options) { base_options.merge({ raw_etag: "ascasc" }) }
 
           it "can create a correct request without force option" do
             request = command.request
 
-            expect(request["Authorization"]).to eq("Bearer token")
+            expect(request["Authorization"]).to eq("Bearer xyz")
             expect(request["Content-Type"]).to eq("application/json; UTF8")
-            expect(request["If-Match"]).to eq("etag")
-            expect(request.path).to eq("/v1/projects/project_id/remoteConfig")
+            expect(request["If-Match"]).to eq("ascasc")
+            expect(request.path).to eq("/v1/projects/dragon/remoteConfig")
           end
         end
       end

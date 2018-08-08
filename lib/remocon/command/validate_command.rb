@@ -5,33 +5,43 @@ module Remocon
     class Validate
       include Remocon::InterpreterHelper
 
+      attr_reader :config, :cmd_opts
+
       def initialize(opts)
-        @opts = opts
-
-        @conditions_filepath = @opts[:conditions]
-        @parameters_filepath = @opts[:parameters]
-
+        @config = Remocon::Config.new(opts)
         @cmd_opts = { validate_only: true }
+      end
+
+      def require_parameters_file_path
+        config.parameters_file_path
+      end
+
+      def require_conditions_file_path
+        config.conditions_file_path
       end
 
       def run
         validate_options
 
-        if parameter_errors.empty? && condition_errors.empty?
+        errors = parameter_errors + condition_errors
+
+        if errors.empty?
           STDOUT.puts "No error was found."
         else
-          (parameter_errors + condition_errors).each do |e|
+          errors.each do |e|
             STDERR.puts "#{e.class} #{e.message}"
             STDERR.puts e.backtrace.join("\n")
           end
         end
+
+        errors.empty?
       end
 
       private
 
       def validate_options
-        raise ValidationError, "A condition file must exist" unless File.exist?(@conditions_filepath)
-        raise ValidationError, "A parameter file must exist" unless File.exist?(@parameters_filepath)
+        raise ValidationError, "A condition file must exist" unless File.exist?(config.conditions_file_path)
+        raise ValidationError, "A parameter file must exist" unless File.exist?(config.parameters_file_path)
       end
     end
   end

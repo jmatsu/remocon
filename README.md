@@ -7,19 +7,27 @@ Conditions and parameters are managed by YAML files.
 
 ## Usage
 
-You need to get an access token for your firebase project.
-
-```bash
-export FIREBASE_PROJECT_ID='your project id'
-export REMOTE_CONFIG_ACCESS_TOKEN='your access token'
-```
+To get an access token, `bin/get_access_token <firebase adminsdk json>` would help you.
 
 ### Get the current configs into your local
 
 ```bash
-bundle exec remocon pull --dest=${path to dir}
+bundle exec remocon pull --prefix=projects --id=my_project_dev --token=xyz
+```
 
-# you can see ${path to dir}/${FIREBASE_PROJECT_ID}/{paremeters.yml, conditions.yml, config.json, etag}
+Then, you can see `paremeters.yml, conditions.yml, config.json, etag` files in `projects/my_project_dev` directory.  
+If you don't specify `--prefix`, then the command create the files in the working directory
+
+*Environment variables*
+
+Some variables can be injected by environment variables.
+
+```bash
+export REMOCON_FIREBASE_PROJECT_ID=<--id>
+export REMOCON_FIREBASE_ACCESS_TOKEN=<--token>
+export REMOCON_PREFIX=<--prefix> # Optional
+
+FIREBASE_PROJECT_ID and REMOTE_CONFIG_ACCESS_TOKEN are supported but they are deprecated now
 ```
 
 ### Edit configs on your local
@@ -52,7 +60,17 @@ key1: # key name
 ### Update configs on remote
 
 ```bash
-bundle exec remocon push --source=${path to a json file} --etag=${string or path to a file}
+# Create new configs as projects/my_project_dev/config.json
+bundle exec remocon create --prefix=projects --id=my_project_dev
+
+# Upload projects/my_project_dev/config.json by using projects/my_project_dev/etag
+bundle exec remocon push --prefix=projects --id=my_project_dev --token=xyz
+
+# You can use custom paths for config.json and etag
+bundle exec remocon push --source=</path/to/config json> --etag=</path/to/etag>
+
+# Use the fixed etag value
+bundle exec remocon push --raw_etag=<raw etag value>
 ```
 
 ## Installation

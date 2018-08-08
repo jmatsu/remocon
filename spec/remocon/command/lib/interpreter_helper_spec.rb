@@ -8,10 +8,16 @@ module Remocon
       Struct.new(:helper_klass) do
         include InterpreterHelper
 
-        def initialize
-          @parameters_filepath = ""
-          @conditions_filepath = ""
-          @cmd_opts = {}
+        def cmd_opts
+          {}
+        end
+
+        def require_parameters_file_path
+          ""
+        end
+
+        def require_conditions_file_path
+          ""
         end
       end
     end
