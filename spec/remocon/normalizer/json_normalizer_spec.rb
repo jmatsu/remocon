@@ -43,13 +43,15 @@ module Remocon
         context "float value" do
           let(:content) { 4.32 }
 
-          it_behaves_like "validation error"
+          it_behaves_like "validation successfully" if Gem::Version.create(RUBY_VERSION) >= Gem::Version.create("2.4.0")
+          it_behaves_like "validation error" if Gem::Version.create(RUBY_VERSION) < Gem::Version.create("2.4.0")
         end
 
         context "integer" do
           let(:content) { 123_123 }
 
-          it_behaves_like "validation error"
+          it_behaves_like "validation successfully" if Gem::Version.create(RUBY_VERSION) >= Gem::Version.create("2.4.0")
+          it_behaves_like "validation error" if Gem::Version.create(RUBY_VERSION) < Gem::Version.create("2.4.0")
         end
 
         context "hash" do
@@ -59,19 +61,37 @@ module Remocon
         end
       end
 
-      describe "normalize" do
-        context "when json string is given" do
-          let(:content) { '{ "key1" : "any string" }' }
-          let(:expected) { JSON.parse('{ "key1" : "any string" }').to_json }
+      if Gem::Version.create(RUBY_VERSION) >= Gem::Version.create("2.4.0")
+        describe "normalize" do
+          context "when json string is given" do
+            let(:content) { '{ "key1" : "any string" }' }
+            let(:expected) { JSON.parse('{ "key1" : "any string" }').to_json }
 
-          it_behaves_like "normalize"
-        end
+            it_behaves_like "normalize"
+          end
 
-        context "when hash is given" do
-          let(:content) { { key1: "any string" } }
-          let(:expected) { JSON.parse('{ "key1" : "any string" }').to_json }
+          if Gem::Version.create(RUBY_VERSION) >= Gem::Version.create("2.4.0")
+            context "when hash is given" do
+              let(:content) { { key1: "any string" } }
+              let(:expected) { JSON.parse('{ "key1" : "any string" }').to_json }
 
-          it_behaves_like "normalize"
+              it_behaves_like "normalize"
+            end
+          end
+
+          context "when float is given" do
+            let(:content) { 4.32 }
+            let(:expected) { "4.32" }
+
+            it_behaves_like "normalize"
+          end
+
+          context "when integer is given" do
+            let(:content) { 432 }
+            let(:expected) { "432" }
+
+            it_behaves_like "normalize"
+          end
         end
       end
     end
