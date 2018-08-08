@@ -168,3 +168,11 @@ Style/TrailingCommaInArrayLiteral:
 
 Style/TrailingCommaInHashLiteral:
   Enabled: false
+
+Naming/HeredocDelimiterNaming:
+  Exclude:
+    - 'vendor/**/*'
+    - 'spec/**/*'
+
+Security/Open:
+  Enabled: false
