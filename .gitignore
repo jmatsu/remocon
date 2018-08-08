@@ -311,3 +311,5 @@ modules.xml
 
 
 # End of https://www.gitignore.io/api/rubymine+all,rubymine+iml
+
+firebase-adminsdk.json
