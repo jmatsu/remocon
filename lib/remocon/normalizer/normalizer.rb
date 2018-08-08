@@ -27,7 +27,7 @@ module Remocon
     end
 
     def self.respond_symbol
-      raise Remocon::UnsupportedTypeError, 'unknown'
+      raise Remocon::UnsupportedTypeError, "unknown"
     end
   end
 end

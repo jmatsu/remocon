@@ -23,8 +23,8 @@ module Remocon
       }
     end
 
-    context '#skip_nil_values' do
-      it 'should delete keys which has nil' do
+    context "#skip_nil_values" do
+      it "should delete keys which has nil" do
         expect(target.skip_nil_values).to eq({
                                                b: {
                                                  d: "remain",
@@ -40,8 +40,8 @@ module Remocon
       end
     end
 
-    context '#stringify_values' do
-      it 'should have only string values' do
+    context "#stringify_values" do
+      it "should have only string values" do
         expect(target.stringify_values).to eq({
                                                 a: "",
                                                 b: {

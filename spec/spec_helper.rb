@@ -1,12 +1,12 @@
 # frozen_string_literal: true
 
-require 'bundler/setup'
-require 'rspec'
-require 'remocon'
+require "bundler/setup"
+require "rspec"
+require "remocon"
 
 RSpec.configure do |config|
   # Enable flags like --only-failures and --next-failure
-  config.example_status_persistence_file_path = '.rspec_status'
+  config.example_status_persistence_file_path = ".rspec_status"
 
   config.disable_monkey_patching!
   config.expose_dsl_globally = true
@@ -65,8 +65,8 @@ def valid_conditions
 end
 
 def config_json
-  JSON.parse(File.open(fixture_path('config.json')).read).with_indifferent_access
+  JSON.parse(File.open(fixture_path("config.json")).read).with_indifferent_access
 end
 
-ENV['FIREBASE_PROJECT_ID'] = 'project_id'
-ENV['REMOTE_CONFIG_ACCESS_TOKEN'] = 'token'
+ENV["FIREBASE_PROJECT_ID"] = "project_id"
+ENV["REMOTE_CONFIG_ACCESS_TOKEN"] = "token"

@@ -7,7 +7,8 @@ module Remocon
     end
 
     def validate
-      str_content = @content.is_a?(Hash) ? @content.to_json : @content.to_s
+      str_content = @content.kind_of?(Hash) ? @content.to_json : @content.to_s
+      puts str_content
       @json = JSON.parse(str_content).to_json
     rescue JSON::ParserError => e
       raise ValidationError, e.message

@@ -17,9 +17,9 @@ class Hash
 
   def stringify_values
     self.deep_merge(self) do |_, _, v|
-      if v.is_a?(Hash)
+      if v.kind_of?(Hash)
         v.stringify_values
-      elsif v.is_a?(Array)
+      elsif v.kind_of?(Array)
         v.stringify_values
       else
         v.to_s

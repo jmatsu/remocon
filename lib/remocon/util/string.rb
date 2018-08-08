@@ -8,6 +8,6 @@ class String
   def to_boolean
     return true if self == "true"
     return false if self == "false"
-    raise ArgumentError, 'String cannot be converted to Boolean'
+    raise ArgumentError, "String cannot be converted to Boolean"
   end
 end
