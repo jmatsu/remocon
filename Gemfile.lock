@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    remocon (0.1.0)
+    remocon (0.2.0)
       activesupport
       thor
 
