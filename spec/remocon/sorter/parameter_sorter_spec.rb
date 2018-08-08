@@ -17,23 +17,23 @@ module Remocon
               value: "cond2 value"
             }
           },
-          normalizer: 'json',
-          description: 'example example example',
+          normalizer: "json",
+          description: "example example example",
           options: {
-            option2: 'option2',
-            option3: 'option3',
-            option1: 'option1'
+            option2: "option2",
+            option3: "option3",
+            option1: "option1"
           }
         },
         key2: {
-          description: 'example example example',
-          normalizer: 'json',
+          description: "example example example",
+          normalizer: "json",
           value: "value"
         },
         key3: {
           file: "file",
-          description: 'example example example',
-          normalizer: 'json',
+          description: "example example example",
+          normalizer: "json",
           conditions: {
             "cond2" => {
               value: "cond2 value"
@@ -43,21 +43,21 @@ module Remocon
             }
           },
           options: {
-            option3: 'option3',
-            option2: 'option2',
-            option1: 'option1'
+            option3: "option3",
+            option2: "option2",
+            option1: "option1"
           }
         }
       }
     end
 
-    context '#sort_parameters' do
-      it 'should sort' do
+    context "#sort_parameters" do
+      it "should sort" do
         expect(sorter.sort_parameters(target)).to eq({
           key1: {
-            description: 'example example example',
+            description: "example example example",
             value: "value",
-            normalizer: 'json',
+            normalizer: "json",
             conditions: {
               "cond1" => {
                 value: "cond1 value"
@@ -67,20 +67,20 @@ module Remocon
               }
             },
             options: {
-              option2: 'option2',
-              option3: 'option3',
-              option1: 'option1'
+              option2: "option2",
+              option3: "option3",
+              option1: "option1"
             }
           },
           key2: {
-            description: 'example example example',
+            description: "example example example",
             value: "value",
-            normalizer: 'json'
+            normalizer: "json"
           },
           key3: {
-            description: 'example example example',
+            description: "example example example",
             file: "file",
-            normalizer: 'json',
+            normalizer: "json",
             conditions: {
               "cond1" => {
                 value: "cond1 value"
@@ -90,9 +90,9 @@ module Remocon
               }
             },
             options: {
-              option3: 'option3',
-              option2: 'option2',
-              option1: 'option1'
+              option3: "option3",
+              option2: "option2",
+              option1: "option1"
             }
           }
 

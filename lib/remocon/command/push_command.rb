@@ -8,8 +8,8 @@ module Remocon
       def initialize(opts)
         @opts = opts
 
-        @project_id = ENV.fetch('FIREBASE_PROJECT_ID')
-        @token = ENV.fetch('REMOTE_CONFIG_ACCESS_TOKEN')
+        @project_id = ENV.fetch("FIREBASE_PROJECT_ID")
+        @token = ENV.fetch("REMOTE_CONFIG_ACCESS_TOKEN")
         @uri = URI.parse("https://firebaseremoteconfig.googleapis.com/v1/projects/#{@project_id}/remoteConfig")
         @source_filepath = @opts[:source]
         @etag = File.exist?(@opts[:etag]) ? File.open(@opts[:etag]).read : @opts[:etag] if @opts[:etag]
@@ -36,13 +36,13 @@ module Remocon
       def request
         return @request if @request
 
-        raise 'etag should be specified. If you want to ignore this error, then add --force option' unless @etag || @ignore_etag
+        raise "etag should be specified. If you want to ignore this error, then add --force option" unless @etag || @ignore_etag
 
         headers = {
-          'Authorization' => "Bearer #{@token}",
-          'Content-Type' => 'application/json; UTF8'
+          "Authorization" => "Bearer #{@token}",
+          "Content-Type" => "application/json; UTF8"
         }
-        headers['If-Match'] = @etag || '*'
+        headers["If-Match"] = @etag || "*"
 
         request = Net::HTTP::Put.new(uri.request_uri, headers)
         request.body = ""
@@ -65,20 +65,20 @@ module Remocon
         when Net::HTTPOK
           parse_success_body(response, response_body)
           # intentional behavior
-          STDERR.puts 'Updated successfully.'
+          STDERR.puts "Updated successfully."
         when Net::HTTPBadRequest
           # sent json contains errors
           parse_error_body(response, response_body) if response_body
-          STDERR.puts '400 but no error body' unless response_body
+          STDERR.puts "400 but no error body" unless response_body
         when Net::HTTPUnauthorized
           # token was expired
-          STDERR.puts '401 Unauthorized. A token might be expired or invalid.'
+          STDERR.puts "401 Unauthorized. A token might be expired or invalid."
         when Net::HTTPForbidden
           # remote config api might be disabled or not yet activated
-          STDERR.puts '403 Forbidden. RemoteConfig API might not be activated or be disabled.'
+          STDERR.puts "403 Forbidden. RemoteConfig API might not be activated or be disabled."
         when Net::HTTPConflict
           # local content is out-to-date
-          STDERR.puts '409 Conflict. Remote was updated. Please update your local files'
+          STDERR.puts "409 Conflict. Remote was updated. Please update your local files"
         end
       end
 
@@ -86,7 +86,7 @@ module Remocon
         return unless etag = response.header["etag"]
 
         if @dest_dir
-          File.open(File.join(@dest_dir, 'etag'), 'w+') do |f|
+          File.open(File.join(@dest_dir, "etag"), "w+") do |f|
             f.write(etag)
             f.flush
           end
@@ -101,13 +101,13 @@ module Remocon
 
         error_body.dig(:error, :details)&.each do |k|
           # for now, see only errors below
-          next unless k['@type'] == 'type.googleapis.com/google.rpc.BadRequest'
+          next unless k["@type"] == "type.googleapis.com/google.rpc.BadRequest"
 
           k[:fieldViolations].each do |e|
-            if e[:field].start_with?('remote_config.conditions')
-              STDERR.puts 'CONDITION DEFINITION ERROR'
+            if e[:field].start_with?("remote_config.conditions")
+              STDERR.puts "CONDITION DEFINITION ERROR"
             else
-              STDERR.puts 'PARAMETER DEFINITION ERROR'
+              STDERR.puts "PARAMETER DEFINITION ERROR"
             end
 
             STDERR.puts e[:description]

@@ -8,7 +8,7 @@ module Remocon
       def initialize(opts)
         @opts = opts
 
-        @project_id = ENV.fetch('FIREBASE_PROJECT_ID')
+        @project_id = ENV.fetch("FIREBASE_PROJECT_ID")
         @conditions_filepath = @opts[:conditions]
         @parameters_filepath = @opts[:parameters]
         @dest_dir = File.join(@opts[:dest], @project_id) if @opts[:dest]
@@ -25,7 +25,7 @@ module Remocon
         }.skip_nil_values.stringify_values
 
         if @dest_dir
-          File.open(File.join(@dest_dir, 'config.json'), 'w+') do |f|
+          File.open(File.join(@dest_dir, "config.json"), "w+") do |f|
             # remote config allows only string values ;(
             f.write(JSON.pretty_generate(artifact))
             f.flush
@@ -40,8 +40,8 @@ module Remocon
       private
 
       def validate_options
-        raise ValidationError, 'A condition file must exist' unless File.exist?(@conditions_filepath)
-        raise ValidationError, 'A parameter file must exist' unless File.exist?(@parameters_filepath)
+        raise ValidationError, "A condition file must exist" unless File.exist?(@conditions_filepath)
+        raise ValidationError, "A parameter file must exist" unless File.exist?(@parameters_filepath)
       end
     end
   end

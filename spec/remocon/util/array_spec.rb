@@ -18,8 +18,8 @@ module Remocon
       ]
     end
 
-    context '#stringify_values' do
-      it 'should have only string values' do
+    context "#stringify_values" do
+      it "should have only string values" do
         expect(target.stringify_values).to eq([
                                                 "",
                                                 "a",

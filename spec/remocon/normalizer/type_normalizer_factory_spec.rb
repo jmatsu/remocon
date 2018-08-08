@@ -7,39 +7,39 @@ module Remocon
     let(:conditions) do
       [
         {
-          name: 'name1',
-          expression: 'expression1',
-          tagColor: 'tagColor1',
-          custom1: 'custom1',
-          custom2: 'custom2'
+          name: "name1",
+          expression: "expression1",
+          tagColor: "tagColor1",
+          custom1: "custom1",
+          custom2: "custom2"
         },
         {
-          name: 'name2',
-          custom2: 'custom2',
-          tagColor: 'tagColor2',
-          custom1: 'custom1',
-          expression: 'expression2'
+          name: "name2",
+          custom2: "custom2",
+          tagColor: "tagColor2",
+          custom1: "custom1",
+          expression: "expression2"
         },
         {
-          custom1: 'custom1',
-          custom2: 'custom2',
-          expression: 'expression3',
-          name: 'name3',
-          tagColor: 'tagColor3'
+          custom1: "custom1",
+          custom2: "custom2",
+          expression: "expression3",
+          name: "name3",
+          tagColor: "tagColor3"
         },
         {
-          expression: 'expression4',
-          tagColor: 'tagColor4',
-          name: 'name4',
-          custom2: 'custom2',
-          custom1: 'custom1'
+          expression: "expression4",
+          tagColor: "tagColor4",
+          name: "name4",
+          custom2: "custom2",
+          custom1: "custom1"
         }
       ]
     end
 
     # this feature is a prototype so it's okay to add ignore marker if this fails
-    context '#register' do
-      it 'should return as it is' do
+    context "#register" do
+      it "should return as it is" do
         expect(TypeNormalizerFactory.get(:dummy)).to eq(nil)
 
         class DummyNormalizer < Remocon::Normalizer
@@ -54,8 +54,8 @@ module Remocon
       end
     end
 
-    context '#get' do
-      it 'should return a corresponding normalizer' do
+    context "#get" do
+      it "should return a corresponding normalizer" do
         expect(TypeNormalizerFactory.get(Remocon::Type::STRING)).to eq(StringNormalizer)
         expect(TypeNormalizerFactory.get(Remocon::Type::INTEGER)).to eq(IntegerNormalizer)
         expect(TypeNormalizerFactory.get(Remocon::Type::BOOLEAN)).to eq(BooleanNormalizer)

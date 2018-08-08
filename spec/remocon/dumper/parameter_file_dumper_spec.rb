@@ -31,8 +31,8 @@ module Remocon
       JSON.parse(json).with_indifferent_access
     end
 
-    context '#dump' do
-      it 'should return as it is' do
+    context "#dump" do
+      it "should return as it is" do
         yaml = <<~EOS
           key1:
             value: '100'

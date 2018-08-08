@@ -2,7 +2,7 @@
 
 module Remocon
   module ConditionSorter
-    CONDITION_KEYS = %i[name expression tagColor]
+    CONDITION_KEYS = %i(name expression tagColor).freeze
 
     def sort_conditions(conditions)
       conditions
@@ -12,7 +12,7 @@ module Remocon
           if !CONDITION_KEYS.include?(a) && !CONDITION_KEYS.include?(b)
             a <=> b
           else
-            (CONDITION_KEYS.index(a) || 10000) <=> (CONDITION_KEYS.index(b) || 10000)
+            (CONDITION_KEYS.index(a) || 10_000) <=> (CONDITION_KEYS.index(b) || 10_000)
           end
         end
 

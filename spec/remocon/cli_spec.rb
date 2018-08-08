@@ -19,7 +19,7 @@ module Remocon
         let(:klass)   { Remocon::Command::Create }
         let(:command) { :create }
 
-        let(:options) { { parameters: '', conditions: '' } }
+        let(:options) { { parameters: "", conditions: "" } }
 
         it_behaves_like "CLI examples"
       end
@@ -37,7 +37,7 @@ module Remocon
         let(:klass)   { Remocon::Command::Push }
         let(:command) { :push }
 
-        let(:options) { { source: '' } }
+        let(:options) { { source: "" } }
 
         it_behaves_like "CLI examples"
       end
@@ -46,7 +46,7 @@ module Remocon
         let(:klass)   { Remocon::Command::Validate }
         let(:command) { :validate }
 
-        let(:options) { { parameters: '', conditions: '' } }
+        let(:options) { { parameters: "", conditions: "" } }
 
         it_behaves_like "CLI examples"
       end
