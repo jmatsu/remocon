@@ -1,3 +1,5 @@
+[![Gem Version](https://badge.fury.io/rb/remocon.svg)](https://badge.fury.io/rb/remocon) [![Build Status](https://travis-ci.org/jmatsu/remocon.svg?branch=master)](https://travis-ci.org/jmatsu/remocon)
+
 # Remocon
 
 *remocon* is a CLI for Firebase Remote Config via its REST API.  
