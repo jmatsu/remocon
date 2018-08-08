@@ -43,7 +43,7 @@ module Remocon
     private
 
     def execute(klass)
-      exit(klass.new(options).run && 0 || 1)
+      exit(1) unless klass.new(options).run
     end
   end
 end
