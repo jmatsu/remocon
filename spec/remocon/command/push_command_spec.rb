@@ -8,7 +8,9 @@ module Remocon
       let(:command) { Push.new(options) }
       let(:base_options) do
         {
-          source: fixture_path("config.json")
+          source: fixture_path("config_file.json"),
+          token: "xyz",
+          id: "dragon",
         }
       end
 
@@ -41,15 +43,15 @@ module Remocon
         end
 
         context "a raw etag is provided" do
-          let(:options) { base_options.merge({ raw_etag: "etag" }) }
+          let(:options) { base_options.merge({ raw_etag: "ascasc" }) }
 
           it "can create a correct request without force option" do
             request = command.request
 
-            expect(request["Authorization"]).to eq("Bearer token")
+            expect(request["Authorization"]).to eq("Bearer xyz")
             expect(request["Content-Type"]).to eq("application/json; UTF8")
-            expect(request["If-Match"]).to eq("etag")
-            expect(request.path).to eq("/v1/projects/project_id/remoteConfig")
+            expect(request["If-Match"]).to eq("ascasc")
+            expect(request.path).to eq("/v1/projects/dragon/remoteConfig")
           end
         end
       end

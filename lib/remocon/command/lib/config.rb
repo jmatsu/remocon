@@ -39,7 +39,6 @@ module Remocon
     def project_dir_path
       @project_dir_path ||= begin
         dir_path = destination_dir_path
-
         File.join(dir_path, project_id) if dir_path
       end
     end
@@ -80,7 +79,11 @@ module Remocon
 
     def etag
       @etag ||= begin
-        opts[:raw_etag] || etag_file_path && File.exist?(etag_file_path) && File.open(etag_file_path).read || opts[:force] && "*"
+        if opts[:force] && opts[:raw_etag]
+          raise "--force and --raw_etag cannot be specified"
+        end
+
+        opts[:force] && "*" || opts[:raw_etag] || etag_file_path && File.exist?(etag_file_path) && File.open(etag_file_path).read
       end
     end
   end
