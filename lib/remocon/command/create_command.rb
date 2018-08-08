@@ -5,15 +5,19 @@ module Remocon
     class Create
       include Remocon::InterpreterHelper
 
+      attr_reader :config, :cmd_opts
+
       def initialize(opts)
-        @opts = opts
-
-        @project_id = ENV.fetch("FIREBASE_PROJECT_ID")
-        @conditions_filepath = @opts[:conditions]
-        @parameters_filepath = @opts[:parameters]
-        @dest_dir = File.join(@opts[:dest], @project_id) if @opts[:dest]
-
+        @config = Remocon::Config.new(opts)
         @cmd_opts = { validate_only: false }
+      end
+
+      def require_parameters_file_path
+        config.parameters_file_path
+      end
+
+      def require_conditions_file_path
+        config.conditions_file_path
       end
 
       def run
@@ -24,8 +28,8 @@ module Remocon
           parameters: parameter_hash
         }.skip_nil_values.stringify_values
 
-        if @dest_dir
-          File.open(File.join(@dest_dir, "config.json"), "w+") do |f|
+        if config.project_dir_path
+          File.open(config_json_file_path, "w+") do |f|
             # remote config allows only string values ;(
             f.write(JSON.pretty_generate(artifact))
             f.flush
@@ -40,8 +44,8 @@ module Remocon
       private
 
       def validate_options
-        raise ValidationError, "A condition file must exist" unless File.exist?(@conditions_filepath)
-        raise ValidationError, "A parameter file must exist" unless File.exist?(@parameters_filepath)
+        raise ValidationError, "A condition file must exist" unless File.exist?(conditions_file_path)
+        raise ValidationError, "A parameter file must exist" unless File.exist?(parameters_file_path)
       end
     end
   end

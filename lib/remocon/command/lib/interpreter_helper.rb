@@ -5,11 +5,21 @@ module Remocon
     include Remocon::ConditionSorter
     include Remocon::ParameterSorter
 
-    attr_reader :parameters_filepath, :conditions_filepath, :cmd_opts
+    def cmd_opts
+      raise NotImplementedError
+    end
+
+    def require_parameters_file_path
+      raise NotImplementedError
+    end
+
+    def require_conditions_file_path
+      raise NotImplementedError
+    end
 
     def read_parameters
       @read_parameters ||= begin
-        parameter_interpreter = Remocon::ParameterFileInterpreter.new(parameters_filepath)
+        parameter_interpreter = Remocon::ParameterFileInterpreter.new(require_parameters_file_path)
         parameter_interpreter.read(condition_names, cmd_opts)
       end
     end
@@ -24,7 +34,7 @@ module Remocon
 
     def read_conditions
       @read_conditions ||= begin
-        condition_interpreter = Remocon::ConditionFileInterpreter.new(conditions_filepath)
+        condition_interpreter = Remocon::ConditionFileInterpreter.new(require_conditions_file_path)
         condition_interpreter.read(cmd_opts)
       end
     end
