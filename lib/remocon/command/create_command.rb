@@ -44,8 +44,8 @@ module Remocon
       private
 
       def validate_options
-        raise ValidationError, "A condition file must exist" unless File.exist?(conditions_file_path)
-        raise ValidationError, "A parameter file must exist" unless File.exist?(parameters_file_path)
+        raise ValidationError, "A condition file must exist" unless File.exist?(config.conditions_file_path)
+        raise ValidationError, "A parameter file must exist" unless File.exist?(config.parameters_file_path)
       end
     end
   end

@@ -18,10 +18,12 @@ module Remocon
         do_request
       end
 
+      def uri
+        @uri ||= URI.parse(config.endpoint)
+      end
+
       def client
         return @client if @client
-
-        uri = URI.parse(config.endpoint)
 
         client = Net::HTTP.new(uri.host, uri.port)
         client.use_ssl = true
@@ -40,7 +42,7 @@ module Remocon
           "If-Match" => config.etag,
         }
 
-        request = Net::HTTP::Put.new(config.endpoint, headers)
+        request = Net::HTTP::Put.new(uri.request_uri, headers)
         request.body = ""
         request.body << File.read(config.config_json_file_path).delete("\r\n")
 

@@ -24,6 +24,13 @@ module Remocon
             expect { command.request }.to raise_error(StandardError)
           end
         end
+        context "a etag file is provided but not found" do
+          let(:options) { base_options.merge({ etag: "etag" }) }
+
+          it "should raise an error without force option" do
+            expect { command.request }.to raise_error(StandardError)
+          end
+        end
 
         context "a etag is not provided but force option is provided" do
           let(:options) { base_options.merge({ force: true }) }
@@ -33,8 +40,8 @@ module Remocon
           end
         end
 
-        context "a etag is provided" do
-          let(:options) { base_options.merge({ etag: "etag" }) }
+        context "a raw etag is provided" do
+          let(:options) { base_options.merge({ raw_etag: "etag" }) }
 
           it "can create a correct request without force option" do
             request = command.request

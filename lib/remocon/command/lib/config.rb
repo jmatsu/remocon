@@ -80,7 +80,7 @@ module Remocon
 
     def etag
       @etag ||= begin
-        opts[:raw_etag] || File.exists?(etag_file_path) && File.open(etag_file_path).read || opts[:force] && "*"
+        opts[:raw_etag] || etag_file_path && File.exists?(etag_file_path) && File.open(etag_file_path).read || opts[:force] && "*"
       end
     end
   end
