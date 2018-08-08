@@ -83,7 +83,9 @@ module Remocon
       end
 
       def parse_success_body(response, _success_body)
-        return unless etag = response.header["etag"]
+        etag = response.header["etag"]
+
+        return unless etag
 
         if @dest_dir
           File.open(File.join(@dest_dir, "etag"), "w+") do |f|

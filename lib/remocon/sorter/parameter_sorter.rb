@@ -7,9 +7,9 @@ module Remocon
     def sort_parameters(parameters)
       arr = parameters.sort.map do |k, v|
         hash_arr = v.sort { |(a, _), (b, _)| PARAMETER_KEYS.index(a) <=> PARAMETER_KEYS.index(b) }
-          .map do |k, v|
+          .map do |k1, v1|
           {
-            k => k.to_sym == :conditions ? sort_parameters(v) : v
+            k1 => k1.to_sym == :conditions ? sort_parameters(v1) : v1
           }
         end
 

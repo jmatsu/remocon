@@ -43,13 +43,13 @@ module Remocon
         context "float value" do
           let(:content) { 4.32 }
 
-          it_behaves_like "validation successfully"
+          it_behaves_like "validation error"
         end
 
         context "integer" do
           let(:content) { 123_123 }
 
-          it_behaves_like "validation successfully"
+          it_behaves_like "validation error"
         end
 
         context "hash" do
@@ -70,20 +70,6 @@ module Remocon
         context "when hash is given" do
           let(:content) { { key1: "any string" } }
           let(:expected) { JSON.parse('{ "key1" : "any string" }').to_json }
-
-          it_behaves_like "normalize"
-        end
-
-        context "when float is given" do
-          let(:content) { 4.32 }
-          let(:expected) { "4.32" }
-
-          it_behaves_like "normalize"
-        end
-
-        context "when integer is given" do
-          let(:content) { 432 }
-          let(:expected) { "432" }
 
           it_behaves_like "normalize"
         end

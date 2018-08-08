@@ -2,7 +2,7 @@
 
 module Remocon
   class ConditionFileInterpreter
-    SUPPORTED_ATTRIBUTED = %i[name expression tagColor]
+    SUPPORTED_ATTRIBUTED = %i(name expression tagColor).freeze
 
     def initialize(filepath)
       # conditions should be Array
@@ -16,14 +16,16 @@ module Remocon
       keys = []
 
       @yaml.each do |hash|
-        raise Remocon::EmptyNameError, 'name must not be empty' unless hash[:name]
-        raise Remocon::EmptyExpressionError, 'expression must not be empty' unless hash[:expression]
-        raise Remocon::DuplicateKeyError, "#{hash[:name]} is duplicated" if keys.include?(hash[:name])
+        begin
+          raise Remocon::EmptyNameError, "name must not be empty" unless hash[:name]
+          raise Remocon::EmptyExpressionError, "expression must not be empty" unless hash[:expression]
+          raise Remocon::DuplicateKeyError, "#{hash[:name]} is duplicated" if keys.include?(hash[:name])
 
-        keys.push(hash[:name])
-      rescue Remocon::ValidationError => e
-        raise e unless opts[:validate_only]
-        errors.push(e)
+          keys.push(hash[:name])
+        rescue Remocon::ValidationError => e
+          raise e unless opts[:validate_only]
+          errors.push(e)
+        end
       end
 
       [json_array, errors]

@@ -9,19 +9,21 @@ module Remocon
     def read(condition_names, opts = {})
       errors = []
       json_hash = @yaml.each_with_object({}) do |(key, body), hash|
-        raise Remocon::DuplicateKeyError, "#{key} is duplicated" if hash[key]
+        begin
+          raise Remocon::DuplicateKeyError, "#{key} is duplicated" if hash[key]
 
-        hash[key] = {
-          defaultValue: {
-            value: parse_value_body(key, body)
+          hash[key] = {
+            defaultValue: {
+              value: parse_value_body(key, body)
+            }
           }
-        }
 
-        hash[key][:conditionalValues] = parse_condition_body(condition_names, key, body[:conditions]) if body[:conditions]
-        hash[key][:description] = body[:description] if body[:description]
-      rescue Remocon::ValidationError => e
-        raise e unless opts[:validate_only]
-        errors.push(e)
+          hash[key][:conditionalValues] = parse_condition_body(condition_names, key, body[:conditions]) if body[:conditions]
+          hash[key][:description] = body[:description] if body[:description]
+        rescue Remocon::ValidationError => e
+          raise e unless opts[:validate_only]
+          errors.push(e)
+        end
       end
 
       [json_hash.with_indifferent_access, errors]
