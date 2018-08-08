@@ -90,6 +90,19 @@ module Remocon
 
     context "#destination_dir_path" do
       context "opt-driven" do
+        let(:opts) { { prefix: "x" } }
+
+        it "should return an opt value" do
+          expect(config.destination_dir_path).to eq("x")
+        end
+
+        it "should return an opt value even if env exists" do
+          ENV[Remocon::Config::REMOCON_DESTINATION_DIR_KEY] = "yyyy"
+
+          expect(config.destination_dir_path).to eq("x")
+        end
+      end
+      context "backward compatibility" do
         let(:opts) { { dest: "x" } }
 
         it "should return an opt value" do
@@ -133,11 +146,11 @@ module Remocon
         end
       end
 
-      context "no opts" do
-        let(:opts) { {} }
+      context "default value" do
+        let(:opts) { { id: "id" } }
 
-        it "should return nil" do
-          expect(config.project_dir_path).to be_falsey
+        it "should be same with id" do
+          expect(config.project_dir_path).to eq("id")
         end
       end
     end
@@ -160,14 +173,6 @@ module Remocon
           expect(config.config_json_file_path).to eq(expected)
         end
       end
-
-      context "no opts" do
-        let(:opts) { {} }
-
-        it "should return nil" do
-          expect(config.config_json_file_path).to be_falsey
-        end
-      end
     end
 
     context "#conditions_file_path" do
@@ -186,14 +191,6 @@ module Remocon
           expected = "#{config.destination_dir_path}/#{config.project_id}/conditions.yml"
 
           expect(config.conditions_file_path).to eq(expected)
-        end
-      end
-
-      context "no opts" do
-        let(:opts) { {} }
-
-        it "should return nil" do
-          expect(config.conditions_file_path).to be_falsey
         end
       end
     end
@@ -216,14 +213,6 @@ module Remocon
           expect(config.parameters_file_path).to eq(expected)
         end
       end
-
-      context "no opts" do
-        let(:opts) { {} }
-
-        it "should return nil" do
-          expect(config.parameters_file_path).to be_falsey
-        end
-      end
     end
 
     context "#etag_file_path" do
@@ -242,14 +231,6 @@ module Remocon
           expected = "#{config.destination_dir_path}/#{config.project_id}/etag"
 
           expect(config.etag_file_path).to eq(expected)
-        end
-      end
-
-      context "no opts" do
-        let(:opts) { {} }
-
-        it "should return nil" do
-          expect(config.etag_file_path).to be_falsey
         end
       end
     end
@@ -298,7 +279,7 @@ module Remocon
       end
 
       context "no opts" do
-        let(:opts) { {} }
+        let(:opts) { { id: "x" } }
 
         it "should return nil" do
           expect(config.etag).to be_falsey

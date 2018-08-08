@@ -33,47 +33,39 @@ module Remocon
     end
 
     def destination_dir_path
-      @destination_dir_path ||= (opts[:dest] || ENV[REMOCON_DESTINATION_DIR_KEY])
+      @destination_dir_path ||= (opts[:prefix] || opts[:dest] || ENV[REMOCON_DESTINATION_DIR_KEY])
     end
 
     def project_dir_path
       @project_dir_path ||= begin
         dir_path = destination_dir_path
-        File.join(dir_path, project_id) if dir_path
+        (dir_path ? File.join(dir_path, project_id) : project_id).tap { |dir|
+          FileUtils.mkdir_p(dir)
+        }
       end
     end
 
     def config_json_file_path
-      @config_json_file_path ||= begin
-                                     opts[:source] || begin
-                                       proj_dir = project_dir_path
-                                       File.join(proj_dir, CONFIG_JSON_FILE) if proj_dir
-                                     end
-                                   end
+      @config_json_file_path ||= opts[:source] || begin
+        File.join(project_dir_path, CONFIG_JSON_FILE)
+      end
     end
 
     def conditions_file_path
-      @conditions_file_path ||= begin
-                                    opts[:conditions] || begin
-                                      proj_dir = project_dir_path
-                                      File.join(proj_dir, CONDITIONS_FILE_NAME) if proj_dir
-                                    end
-                                  end
+      @conditions_file_path ||= opts[:conditions] || begin
+        File.join(project_dir_path, CONDITIONS_FILE_NAME)
+      end
     end
 
     def parameters_file_path
-      @parameters_file_path ||= begin
-                                    opts[:parameters] || begin
-                                      proj_dir = project_dir_path
-                                      File.join(proj_dir, PARAMETERS_FILE_NAME) if proj_dir
-                                    end
-                                  end
+      @parameters_file_path ||= opts[:parameters] || begin
+        File.join(project_dir_path, PARAMETERS_FILE_NAME)
+      end
     end
 
     def etag_file_path
       @etag_file_path ||= opts[:etag] || begin
-        proj_dir = project_dir_path
-        File.join(proj_dir, ETAG_FILE_NAME) if proj_dir
+        File.join(project_dir_path, ETAG_FILE_NAME)
       end
     end
 
@@ -83,7 +75,7 @@ module Remocon
           raise "--force and --raw_etag cannot be specified"
         end
 
-        opts[:force] && "*" || opts[:raw_etag] || etag_file_path && File.exist?(etag_file_path) && File.open(etag_file_path).read
+        opts[:force] && "*" || opts[:raw_etag] || File.exist?(etag_file_path) && File.open(etag_file_path).read
       end
     end
   end

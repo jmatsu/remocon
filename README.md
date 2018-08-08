@@ -10,17 +10,20 @@ Conditions and parameters are managed by YAML files.
 You need to get an access token for your firebase project.
 
 ```bash
-export FIREBASE_PROJECT_ID='your project id'
-export REMOTE_CONFIG_ACCESS_TOKEN='your access token'
+export REMOCON_FIREBASE_PROJECT_ID=<your project id>
+export REMOCON_FIREBASE_ACCESS_TOKEN=<access token>
+export REMOCON_DESTINATION_PATH=<destination path> # Optional
+
+FIREBASE_PROJECT_ID and REMOTE_CONFIG_ACCESS_TOKEN are supported but they are deprecated now
 ```
 
 ### Get the current configs into your local
 
 ```bash
-bundle exec remocon pull --dest=${path to dir}
-
-# you can see ${path to dir}/${FIREBASE_PROJECT_ID}/{paremeters.yml, conditions.yml, config.json, etag}
+bundle exec remocon pull --dest=projects --id=my_project_dev --token=xyz
 ```
+
+Then, you can see `paremeters.yml, conditions.yml, config.json, etag` files in `projects/my_project_dev` directory.
 
 ### Edit configs on your local
 

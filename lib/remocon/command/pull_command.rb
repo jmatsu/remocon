@@ -23,38 +23,31 @@ module Remocon
       def run
         raw_json, etag = do_request
 
-        if config.project_dir_path
-          FileUtils.mkdir_p(config.project_dir_path)
+        raw_hash = JSON.parse(raw_json).with_indifferent_access
 
-          raw_hash = JSON.parse(raw_json).with_indifferent_access
+        raise "etag cannot be fetched. please try again" unless etag
 
-          raise "etag cannot be fetched. please try again" unless etag
+        conditions = raw_hash[:conditions] || []
+        parameters = raw_hash[:parameters] || {}
 
-          conditions = raw_hash[:conditions] || []
-          parameters = raw_hash[:parameters] || {}
+        File.open(config.conditions_file_path, "w+") do |f|
+          f.write(JSON.parse(Remocon::ConditionFileDumper.new(sort_conditions(conditions)).dump.to_json).to_yaml)
+          f.flush
+        end
 
-          File.open(config.conditions_file_path, "w+") do |f|
-            f.write(JSON.parse(Remocon::ConditionFileDumper.new(sort_conditions(conditions)).dump.to_json).to_yaml)
-            f.flush
-          end
+        File.open(config.parameters_file_path, "w+") do |f|
+          f.write(JSON.parse(Remocon::ParameterFileDumper.new(sort_parameters(parameters)).dump.to_json).to_yaml)
+          f.flush
+        end
 
-          File.open(config.parameters_file_path, "w+") do |f|
-            f.write(JSON.parse(Remocon::ParameterFileDumper.new(sort_parameters(parameters)).dump.to_json).to_yaml)
-            f.flush
-          end
+        File.open(config.config_json_file_path, "w+") do |f|
+          f.write(JSON.pretty_generate({ conditions: sort_conditions(conditions), parameters: sort_parameters(parameters) }))
+          f.flush
+        end
 
-          File.open(config.config_json_file_path, "w+") do |f|
-            f.write(JSON.pretty_generate({ conditions: sort_conditions(conditions), parameters: sort_parameters(parameters) }))
-            f.flush
-          end
-
-          File.open(config.etag_file_path, "w+") do |f|
-            f.write(etag)
-            f.flush
-          end
-        else
-          STDERR.puts etag
-          STDOUT.puts raw_json
+        File.open(config.etag_file_path, "w+") do |f|
+          f.write(etag)
+          f.flush
         end
       end
 

@@ -17,7 +17,7 @@ module Remocon
                                                    "Authorization" => "Bearer xyz"
                                                  })
 
-          command.run
+          command.send("do_request")
         end
       end
     end

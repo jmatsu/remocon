@@ -28,14 +28,10 @@ module Remocon
           parameters: parameter_hash
         }.skip_nil_values.stringify_values
 
-        if config.project_dir_path
-          File.open(config_json_file_path, "w+") do |f|
-            # remote config allows only string values ;(
-            f.write(JSON.pretty_generate(artifact))
-            f.flush
-          end
-        else
-          STDOUT.puts JSON.pretty_generate(artifact)
+        File.open(config.config_json_file_path, "w+") do |f|
+          # remote config allows only string values ;(
+          f.write(JSON.pretty_generate(artifact))
+          f.flush
         end
 
         artifact
