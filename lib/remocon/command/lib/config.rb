@@ -22,6 +22,10 @@ module Remocon
       @endpoint ||= "https://firebaseremoteconfig.googleapis.com/v1/projects/#{project_id}/remoteConfig"
     end
 
+    def service_json_file_path
+      @service_json_file_path ||= opts[:"service-json"]
+    end
+
     def project_id
       # FIREBASE_PROJECT_ID is for backward compatibility
       @project_id ||= (opts[:id] || ENV[REMOCON_PROJECT_ID_KEY] || ENV["FIREBASE_PROJECT_ID"] || raise("--id or #{REMOCON_PROJECT_ID_KEY} env var is required"))
@@ -71,11 +75,11 @@ module Remocon
 
     def etag
       @etag ||= begin
-        if opts[:force] && opts[:raw_etag]
+        if opts[:force] && opts[:"raw-etag"]
           raise "--force and --raw_etag cannot be specified"
         end
 
-        opts[:force] && "*" || opts[:raw_etag] || File.exist?(etag_file_path) && File.open(etag_file_path).read
+        opts[:force] && "*" || opts[:"raw-etag"] || File.exist?(etag_file_path) && File.open(etag_file_path).read
       end
     end
   end

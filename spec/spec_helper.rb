@@ -16,6 +16,10 @@ RSpec.configure do |config|
   end
 
   config.before(:each) do
+    allow(FileUtils).to receive(:mkdir_p)
+  end
+
+  config.before(:each) do
     ENV[Remocon::Config::REMOCON_PROJECT_ID_KEY] = nil
     ENV[Remocon::Config::REMOCON_ACCESS_TOKEN] = nil
     ENV[Remocon::Config::REMOCON_PREFIX_KEY] = nil

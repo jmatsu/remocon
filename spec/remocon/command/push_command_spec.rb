@@ -43,7 +43,7 @@ module Remocon
         end
 
         context "a raw etag is provided" do
-          let(:options) { base_options.merge({ raw_etag: "ascasc" }) }
+          let(:options) { base_options.merge({ "raw-etag": "ascasc" }) }
 
           it "can create a correct request without force option" do
             request = command.request

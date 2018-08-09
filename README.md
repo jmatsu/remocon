@@ -9,7 +9,14 @@ Conditions and parameters are managed by YAML files.
 
 ## Usage
 
-To get an access token, `bin/get_access_token <service-acount.json>` would help you.
+### Get your access token
+
+Since v0.3.0, remocon is supporting to get an access token.  
+*If this doesn't work, then please try `bin/get_access_token <service-acount.json>`.*
+
+```bash
+token=$(bundle exec remocon --service-json=<path/to/service-account-json>)
+```
 
 ### Get the current configs into your local
 
