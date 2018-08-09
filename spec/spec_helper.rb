@@ -15,7 +15,7 @@ RSpec.configure do |config|
     c.syntax = :expect
   end
 
-  config.before(:all) do
+  config.before(:each) do
     allow(FileUtils).to receive(:mkdir_p)
   end
 

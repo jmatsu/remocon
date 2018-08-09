@@ -237,7 +237,7 @@ module Remocon
 
     context "#etag" do
       context "opt-driven" do
-        let(:opts) { { raw_etag: "xyz" } }
+        let(:opts) { { "raw-etag": "xyz" } }
 
         it "should return an opt value" do
           expect(config.etag).to eq("xyz")

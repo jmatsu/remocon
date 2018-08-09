@@ -36,7 +36,8 @@ module Remocon
       context "files are valid" do
         let(:options) do
           {
-              id: "prj",
+              id: "fixture",
+              prefix: "spec",
             parameters: fixture_path("valid_parameters.yml"),
             conditions: fixture_path("valid_conditions.yml")
           }
