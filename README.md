@@ -9,7 +9,7 @@ Conditions and parameters are managed by YAML files.
 
 ## Usage
 
-To get an access token, `bin/get_access_token <firebase adminsdk json>` would help you.
+To get an access token, `bin/get_access_token <service-acount.json>` would help you.
 
 ### Get the current configs into your local
 
