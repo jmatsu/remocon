@@ -15,7 +15,7 @@ module Remocon
 
         authorizer = Google::Auth::ServiceAccountCredentials.make_creds(
           json_key_io: File.open(config.service_json_file_path),
-          scope: "https://www.googleapis.com/auth/firebase"
+          scope: "https://www.googleapis.com/auth/firebase.remoteconfig"
         )
 
         authorizer.fetch_access_token!
