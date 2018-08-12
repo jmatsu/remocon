@@ -33,6 +33,7 @@ module Remocon
     end
 
     desc "pull", "Pull remote configs"
+    option :merge, type: :boolean, default: true, desc: "use the hash merge algorithm if true. default is true."
     option :prefix, type: :string, desc: "the directory name which will contain project-related files"
     option :token, type: :string, desc: "access token to your project"
     option :id, type: :string, desc: "your project id"

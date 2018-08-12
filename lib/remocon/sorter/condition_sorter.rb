@@ -6,6 +6,7 @@ module Remocon
 
     def sort_conditions(conditions)
       conditions
+        .map(&:symbolize_keys)
         .sort_by { |e| e[:name] }
         .map do |e|
         arr = e.sort do |(a, _), (b, _)|

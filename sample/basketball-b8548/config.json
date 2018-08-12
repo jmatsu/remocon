@@ -14,19 +14,11 @@
   "parameters": {
     "key1": {
       "defaultValue": {
-        "value": "100",
-        "conditions": {
-          "condition1": {
-            "value": "200"
-          },
-          "zxczx": {
-            "value": "100"
-          }
-        }
+        "value": "100"
       },
       "conditionalValues": {
         "condition1": {
-          "value": "200"
+          "value": "400"
         },
         "zxczx": {
           "value": "100"
@@ -55,7 +47,7 @@
     },
     "key6": {
       "defaultValue": {
-        "value": "{\"value\":\"xxxx\"}"
+        "value": "{\"value\":\"234234234234234\"}"
       }
     },
     "key7": {

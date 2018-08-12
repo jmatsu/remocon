@@ -82,5 +82,9 @@ module Remocon
         opts[:force] && "*" || opts[:"raw-etag"] || File.exist?(etag_file_path) && File.open(etag_file_path).read
       end
     end
+
+    def merge?
+      @merge ||= opts[:merge]
+    end
   end
 end
