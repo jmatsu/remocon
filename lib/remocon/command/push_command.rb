@@ -53,30 +53,18 @@ module Remocon
 
         response_body = begin
           json_str = response&.read_body
-          JSON.parse(json_str).with_indifferent_access if json_str
+          (json_str ? JSON.parse(json_str) : {}).with_indifferent_access
         end
 
-        case response
-        when Net::HTTPOK
-          parse_success_body(response, response_body)
-          # intentional behavior
-          STDERR.puts "Updated successfully."
-        when Net::HTTPBadRequest
-          # sent json contains errors
-          parse_error_body(response, response_body) if response_body
-          STDERR.puts "400 but no error body" unless response_body
-        when Net::HTTPUnauthorized
-          # token was expired
-          STDERR.puts "401 Unauthorized. A token might be expired or invalid."
-        when Net::HTTPForbidden
-          # remote config api might be disabled or not yet activated
-          STDERR.puts "403 Forbidden. RemoteConfig API might not be activated or be disabled."
-        when Net::HTTPConflict
-          # local content is out-to-date
-          STDERR.puts "409 Conflict. Remote was updated. Please update your local files"
+        (response.kind_of?(Net::HTTPOK) && parse_success_body(response, response_body)).tap do |result|
+          unless result
+            if response_body.blank?
+              STDERR.puts "No error body"
+            else
+              parse_error_body(response, response_body)
+            end
+          end
         end
-
-        response.kind_of?(Net::HTTPOK)
       end
 
       def parse_success_body(response, _success_body)
@@ -84,19 +72,18 @@ module Remocon
 
         return unless etag
 
-        if config.project_dir_path
-          File.open(config.etag_file_path, "w+") do |f|
-            f.write(etag)
-            f.flush
-          end
-        else
-          STDOUT.puts etag
+        File.open(config.etag_file_path, "w+") do |f|
+          f.write(etag)
+          f.flush
         end
+
+        STDOUT.puts(etag)
+        true
       end
 
       def parse_error_body(_response, error_body)
-        STDERR.puts "Error name : #{error_body[:error][:status]}"
-        STDERR.puts "Please check your json file"
+        STDERR.puts error_body[:error][:status]
+        STDERR.puts error_body[:error][:message]
 
         error_body.dig(:error, :details)&.each do |k|
           # for now, see only errors below
