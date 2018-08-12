@@ -68,6 +68,20 @@ module Remocon
           parameters_yaml = JSON.parse(Remocon::ParameterFileDumper.new(sort_parameters(parameters)).dump.to_json).to_yaml
         end
 
+        write_to_files(conditions_yaml, parameters_yaml, etag)
+      end
+
+      private
+
+      def do_request
+        raw_json, etag = open(config.endpoint, "Authorization" => "Bearer #{config.token}") do |io|
+          [io.read, io.meta["etag"]]
+        end
+
+        [raw_json, etag]
+      end
+
+      def write_to_files(conditions_yaml, parameters_yaml, etag)
         File.open(config.conditions_file_path, "w+") do |f|
           f.write(conditions_yaml)
           f.flush
@@ -87,16 +101,6 @@ module Remocon
           f.write(etag)
           f.flush
         end
-      end
-
-      private
-
-      def do_request
-        raw_json, etag = open(config.endpoint, "Authorization" => "Bearer #{config.token}") do |io|
-          [io.read, io.meta["etag"]]
-        end
-
-        [raw_json, etag]
       end
 
       def conditions_diff(left, right)
