@@ -58,8 +58,6 @@ module Remocon
         parameters = raw_hash[:parameters] || {}
 
         if config.merge? && File.exist?(config.parameters_file_path) && File.exist?(config.parameters_file_path)
-
-          require 'pry'
           unchanged_conditions, added_conditions, changed_conditions, = conditions_diff(left.raw_conditions, conditions)
           unchanged_parameters, added_parameters, changed_parameters, = parameters_diff(left.raw_parameters, parameters)
 
@@ -102,8 +100,8 @@ module Remocon
       end
 
       def conditions_diff(left, right)
-        left_names = left.map{ |c| c[:name] }
-        right_names = right.map{ |c| c[:name] }
+        left_names = left.map { |c| c[:name] }
+        right_names = right.map { |c| c[:name] }
 
         added_names = right_names - left_names
         removed_names = left_names - right_names
@@ -129,7 +127,7 @@ module Remocon
         removed = []
 
         removed_names.each do |k|
-          removed.push(left.find {|c| c[:name] == k })
+          removed.push(left.find { |c| c[:name] == k })
         end
 
         [unchanged, added, changed, removed]
