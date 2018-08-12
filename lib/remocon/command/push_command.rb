@@ -56,7 +56,7 @@ module Remocon
           (json_str ? JSON.parse(json_str) : {}).with_indifferent_access
         end
 
-        (response.is_a?(Net::HTTPOK) && parse_success_body(response, response_body)).tap { |result|
+        (response.kind_of?(Net::HTTPOK) && parse_success_body(response, response_body)).tap do |result|
           unless result
             if response_body.blank?
               STDERR.puts "No error body"
@@ -64,7 +64,7 @@ module Remocon
               parse_error_body(response, response_body)
             end
           end
-        }
+        end
       end
 
       def parse_success_body(response, _success_body)
@@ -82,7 +82,7 @@ module Remocon
       end
 
       def parse_error_body(_response, error_body)
-        STDERR.puts "#{error_body[:error][:status]}"
+        STDERR.puts error_body[:error][:status]
         STDERR.puts error_body[:error][:message]
 
         error_body.dig(:error, :details)&.each do |k|
