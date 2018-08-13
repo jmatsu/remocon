@@ -40,6 +40,7 @@ require "remocon/normalizer/type_normalizer_factory"
 
 require "remocon/command/lib/config"
 require "remocon/command/lib/interpreter_helper"
+require "remocon/command/lib/request"
 
 require "remocon/command/create_command"
 require "remocon/command/get_token_command"

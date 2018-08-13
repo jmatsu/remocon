@@ -42,33 +42,11 @@ module Remocon
       def validate_options
         raise ValidationError, "A condition file must exist" unless File.exist?(config.conditions_file_path)
         raise ValidationError, "A parameter file must exist" unless File.exist?(config.parameters_file_path)
-      end
-
-      def client
-        return @client if @client
-
-        client = Net::HTTP.new(uri.host, uri.port)
-        client.use_ssl = true
-
-        @client = client
-      end
-
-      def uri
-        @uri ||= URI.parse(config.endpoint)
+        raise ValidationError, "An etag file must exist" unless File.exist?(config.etag_file_path)
       end
 
       def remote_etag
-        return @remote_etag if @remote_etag
-
-        headers = {
-            "Authorization" => "Bearer #{config.token}",
-            "Content-Type" => "application/json; UTF8",
-            "Content-Encoding" => "gzip",
-        }
-
-        request = Net::HTTP::Get.new(uri.request_uri, headers)
-
-        @remote_etag = client.request(request).header["etag"]
+        @remote_etag ||= Remocon::Request.fetch_etag(config)
       end
 
       def etag_errors

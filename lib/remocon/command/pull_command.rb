@@ -48,7 +48,7 @@ module Remocon
       end
 
       def run
-        raw_json, etag = do_request
+        raw_json, etag = Remocon::Request.pull(config)
 
         raw_hash = JSON.parse(raw_json).with_indifferent_access
 
@@ -72,14 +72,6 @@ module Remocon
       end
 
       private
-
-      def do_request
-        raw_json, etag = open(config.endpoint, "Authorization" => "Bearer #{config.token}") do |io|
-          [io.read, io.meta["etag"]]
-        end
-
-        [raw_json, etag]
-      end
 
       def write_to_files(conditions_yaml, parameters_yaml, etag)
         File.open(config.conditions_file_path, "w+") do |f|
