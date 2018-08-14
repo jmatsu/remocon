@@ -150,7 +150,7 @@ module Remocon
         end
 
         File.open(config.config_json_file_path, "w+") do |f|
-          f.write(JSON.pretty_generate({ conditions: sort_conditions(conditions), parameters: sort_parameters(parameters) }))
+          f.write(JSON.pretty_generate({ conditions: condition_array, parameters: parameter_hash }))
           f.flush
         end
 
