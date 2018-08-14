@@ -78,6 +78,8 @@ module Remocon
         before do
           allow(STDOUT).to receive(:puts)
           allow(STDERR).to receive(:puts)
+          allow_any_instance_of(Net::HTTPOK).to receive(:header).and_return({ "etag" => "XYZXYZXYZXYZ-0" })
+          allow(Remocon::Request).to receive(:validate).and_return([Net::HTTPOK.new(nil, 200, nil), "{}"])
         end
 
         context "etags are mismatch" do
@@ -86,10 +88,6 @@ module Remocon
           end
 
           it "should return an error" do
-            expect(command).to receive(:print_errors).with(any_args) do |errors|
-              expect(errors.any? { |e| e.kind_of?(ValidationError) }).to be_truthy
-            end
-
             expect(command.run).to be_falsey
           end
         end
@@ -100,33 +98,8 @@ module Remocon
           end
 
           it "should not return any errors" do
-            expect(command).to receive(:print_errors).with([])
             expect(command.run).to be_truthy
           end
-        end
-      end
-
-      context "a parameters file is invalid" do
-        let(:options) do
-          {
-            parameters: fixture_path("invalid_parameters_1.yml"),
-            conditions: fixture_path("valid_conditions.yml"),
-            etag: fixture_path("etag_file"),
-            id: "dragon",
-            token: "valid_token"
-          }
-        end
-
-        before do
-          allow(Remocon::Request).to receive(:fetch_etag).and_return("XYZXYZXYZXYZ")
-        end
-
-        it "should return an error" do
-          expect(command).to receive(:print_errors).with(any_args) do |errors|
-            expect(errors.any? { |e| e.kind_of?(ValidationError) }).to be_truthy
-          end
-
-          expect(command.run).to be_falsey
         end
       end
     end

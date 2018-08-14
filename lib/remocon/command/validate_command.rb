@@ -43,6 +43,7 @@ module Remocon
             else
               # validation api cannot validate etag
               STDERR.puts "the latest etag was updated"
+              false
             end
           else
             # https://firebase.google.com/docs/remote-config/use-config-rest#validate_before_publishing

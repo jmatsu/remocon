@@ -26,6 +26,24 @@ module Remocon
       end
     end
 
+    context "#validate" do
+      it "should send a json request with an etag and a token" do
+        expect(Net::HTTP::Put).to receive(:new).with(URI.parse("https://firebaseremoteconfig.googleapis.com/v1/projects/fixture/remoteConfig?validate_only=true").request_uri, any_args) do |_, headers|
+          expect(headers).to include(
+            "Authorization" => "Bearer valid_token",
+            "Content-Type" => "application/json; UTF8",
+            "If-Match" => "raw_etag"
+          )
+        end.and_call_original
+
+        Tempfile.open do |t|
+          t.write("{}")
+
+          Request.validate(config, t)
+        end
+      end
+    end
+
     context "#pull" do
       it "should request with a token" do
         expect(Request).to receive(:open).with("https://firebaseremoteconfig.googleapis.com/v1/projects/fixture/remoteConfig", {
