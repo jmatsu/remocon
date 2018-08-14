@@ -27,6 +27,31 @@ module Remocon
       return response, response_body
     end
 
+    def self.validate(config, config_temp_file)
+      raise "etag should be specified. If you want to ignore this error, then please add --force option" unless config.etag
+
+      client, uri = Request.build_client(config)
+
+      headers = {
+          "Authorization" => "Bearer #{config.token}",
+          "Content-Type" => "application/json; UTF8",
+          "If-Match" => config.etag,
+      }
+
+      request = Net::HTTP::Put.new("#{uri.request_uri}?validate_only=true", headers)
+      request.body = +""
+      request.body << config_temp_file.read.delete("\r\n")
+
+      response = client.request(request)
+
+      response_body = begin
+        json_str = response.try(:read_body)
+        (json_str ? JSON.parse(json_str) : {}).with_indifferent_access
+      end
+
+      return response, response_body
+    end
+
     def self.pull(config)
       raw_json, etag = open(config.endpoint, "Authorization" => "Bearer #{config.token}") do |io|
         [io.read, io.meta["etag"]]

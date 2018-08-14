@@ -23,21 +23,36 @@ module Remocon
       def run
         validate_options
 
-        errors = parameter_errors + condition_errors + etag_errors
+        artifact = {
+            conditions: condition_array,
+            parameters: parameter_hash
+        }.skip_nil_values.stringify_values
 
-        print_errors(errors)
+        response, body = Tempfile.open do |t|
+          t.write(JSON.pretty_generate(artifact))
+          t.flush
 
-        errors.empty?
-      end
+          Request.validate(config, t)
+        end
 
-      def print_errors(errors)
-        if errors.empty?
-          STDOUT.puts "No error was found."
-        else
-          errors.each do |e|
-            STDERR.puts "#{e.class} #{e.message}"
-            STDERR.puts e.backtrace&.join("\n")
+        if response.kind_of?(Net::HTTPOK)
+          if response.header["etag"] =~ /^.*-0$/
+            if etag_errors.empty?
+              STDOUT.puts "valid"
+              true
+            else
+              # validation api cannot validate etag
+              STDERR.puts "the latest etag was updated"
+              false
+            end
+          else
+            # https://firebase.google.com/docs/remote-config/use-config-rest#validate_before_publishing
+            STDERR.puts "api server returned 200 but etag is not followed the valid format"
+            false
           end
+        else
+          STDERR.puts body
+          false
         end
       end
 
@@ -46,7 +61,7 @@ module Remocon
       def validate_options
         raise ValidationError, "A condition file must exist" unless File.exist?(config.conditions_file_path)
         raise ValidationError, "A parameter file must exist" unless File.exist?(config.parameters_file_path)
-        raise ValidationError, "An etag file must exist" unless File.exist?(config.etag_file_path)
+        raise ValidationError, "An etag must be specified" unless config.etag
       end
 
       def remote_etag
@@ -54,7 +69,7 @@ module Remocon
       end
 
       def etag_errors
-        if config.etag != remote_etag
+        if config.etag != "*" && config.etag != remote_etag
           [ValidationError.new("#{config.etag} is found but the latest etag is #{remote_etag || 'none'}")]
         else
           []

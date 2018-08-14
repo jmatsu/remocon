@@ -53,17 +53,6 @@ module Remocon
       end
     end
 
-    context "#parameter_errors" do
-      before do
-        allow(helper).to receive(:read_parameters).and_return([nil, errors])
-      end
-
-      it "should return errors" do
-        expect(helper).to receive(:read_parameters)
-        expect(helper.parameter_errors).to eq(errors)
-      end
-    end
-
     context "#read_conditions" do
       let(:interpreter) { double("mock") }
 
@@ -86,17 +75,6 @@ module Remocon
       it "should return a result of ConditionFileInterpreter" do
         expect(helper).to receive(:read_conditions)
         expect(helper.condition_array).to eq(conditions)
-      end
-    end
-
-    context "#condition_errors" do
-      before do
-        allow(helper).to receive(:read_conditions).and_return([nil, errors])
-      end
-
-      it "should return a result of ConditionFileInterpreter" do
-        expect(helper).to receive(:read_conditions)
-        expect(helper.condition_errors).to eq(errors)
       end
     end
 
