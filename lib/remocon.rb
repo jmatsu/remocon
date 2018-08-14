@@ -10,6 +10,7 @@ require "open-uri"
 require "fileutils"
 require "net/http"
 require "googleauth"
+require "tempfile"
 
 require "remocon/util/array"
 require "remocon/util/hash"

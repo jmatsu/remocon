@@ -28,10 +28,6 @@ module Remocon
       @parameter_hash ||= sort_parameters(read_parameters.first)
     end
 
-    def parameter_errors
-      @parameter_errors ||= read_parameters.second
-    end
-
     def read_conditions
       @read_conditions ||= begin
         condition_interpreter = Remocon::ConditionFileInterpreter.new(require_conditions_file_path)
@@ -41,10 +37,6 @@ module Remocon
 
     def condition_array
       @condition_array ||= sort_conditions(read_conditions.first)
-    end
-
-    def condition_errors
-      @condition_errors ||= read_conditions.second
     end
 
     def condition_names
