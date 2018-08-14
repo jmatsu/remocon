@@ -1,0 +1,17 @@
+---
+changed_parameter:
+  value: '100'
+  conditions:
+    unchanged_condition:
+      value: '200'
+    will_be_removed_condition:
+      value: '100'
+unchanged_parameter:
+  value: '100'
+  conditions:
+    unchanged_condition:
+      value: '100'
+    changed_condition:
+      value: '300'
+will_be_removed_parameter:
+  value: '123'

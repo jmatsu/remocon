@@ -1,4 +1,4 @@
-# frozen_string_literal: false
+# frozen_string_literal: true
 
 module Remocon
   module Command
@@ -11,50 +11,13 @@ module Remocon
       end
 
       def run
-        # to prevent a real request in spec
         do_request
-      end
-
-      def client
-        return @client if @client
-
-        client = Net::HTTP.new(uri.host, uri.port)
-        client.use_ssl = true
-
-        @client = client
-      end
-
-      def request
-        return @request if @request
-
-        raise "etag should be specified. If you want to ignore this error, then add --force option" unless config.etag
-
-        headers = {
-          "Authorization" => "Bearer #{config.token}",
-          "Content-Type" => "application/json; UTF8",
-          "If-Match" => config.etag,
-        }
-
-        request = Net::HTTP::Put.new(uri.request_uri, headers)
-        request.body = ""
-        request.body << File.read(config.config_json_file_path).delete("\r\n")
-
-        @request = request
       end
 
       private
 
-      def uri
-        @uri ||= URI.parse(config.endpoint)
-      end
-
       def do_request
-        response = client.request(request)
-
-        response_body = begin
-          json_str = response&.read_body
-          (json_str ? JSON.parse(json_str) : {}).with_indifferent_access
-        end
+        response, response_body = Remocon::Request.push(config)
 
         (response.kind_of?(Net::HTTPOK) && parse_success_body(response, response_body)).tap do |result|
           unless result

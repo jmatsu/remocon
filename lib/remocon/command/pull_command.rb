@@ -21,7 +21,7 @@ module Remocon
         end
 
         def raw_conditions
-          YAML.safe_load(File.open(require_conditions_file_path).read)
+          YAML.safe_load(File.open(require_conditions_file_path).read).map(&:with_indifferent_access)
         end
 
         def raw_parameters
@@ -48,7 +48,7 @@ module Remocon
       end
 
       def run
-        raw_json, etag = do_request
+        raw_json, etag = Remocon::Request.pull(config)
 
         raw_hash = JSON.parse(raw_json).with_indifferent_access
 
@@ -69,38 +69,6 @@ module Remocon
         end
 
         write_to_files(conditions_yaml, parameters_yaml, etag)
-      end
-
-      private
-
-      def do_request
-        raw_json, etag = open(config.endpoint, "Authorization" => "Bearer #{config.token}") do |io|
-          [io.read, io.meta["etag"]]
-        end
-
-        [raw_json, etag]
-      end
-
-      def write_to_files(conditions_yaml, parameters_yaml, etag)
-        File.open(config.conditions_file_path, "w+") do |f|
-          f.write(conditions_yaml)
-          f.flush
-        end
-
-        File.open(config.parameters_file_path, "w+") do |f|
-          f.write(parameters_yaml)
-          f.flush
-        end
-
-        File.open(config.config_json_file_path, "w+") do |f|
-          f.write(JSON.pretty_generate({ conditions: sort_conditions(conditions), parameters: sort_parameters(parameters) }))
-          f.flush
-        end
-
-        File.open(config.etag_file_path, "w+") do |f|
-          f.write(etag)
-          f.flush
-        end
       end
 
       def conditions_diff(left, right)
@@ -142,7 +110,7 @@ module Remocon
         removed_keys = left.keys - right.keys
 
         added = added_keys.each_with_object({}) do |k, acc|
-          acc[k] = right[k]
+          acc.merge!(Remocon::ParameterFileDumper.new({ k => right[k] }).dump)
         end
 
         changed = {}
@@ -166,6 +134,30 @@ module Remocon
         end
 
         [unchanged, added, changed, removed]
+      end
+
+      private
+
+      def write_to_files(conditions_yaml, parameters_yaml, etag)
+        File.open(config.conditions_file_path, "w+") do |f|
+          f.write(conditions_yaml)
+          f.flush
+        end
+
+        File.open(config.parameters_file_path, "w+") do |f|
+          f.write(parameters_yaml)
+          f.flush
+        end
+
+        File.open(config.config_json_file_path, "w+") do |f|
+          f.write(JSON.pretty_generate({ conditions: condition_array, parameters: parameter_hash }))
+          f.flush
+        end
+
+        File.open(config.etag_file_path, "w+") do |f|
+          f.write(etag)
+          f.flush
+        end
       end
     end
   end
