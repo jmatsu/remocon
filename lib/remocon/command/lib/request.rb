@@ -3,7 +3,7 @@
 module Remocon
   module Request
     def self.push(config)
-      raise "etag should be specified. If you want to ignore this error, then add --force option" unless config.etag
+      raise "etag should be specified. If you want to ignore this error, then please add --force option" unless config.etag
 
       client, uri = Request.build_client(config)
 
@@ -14,13 +14,13 @@ module Remocon
       }
 
       request = Net::HTTP::Put.new(uri.request_uri, headers)
-      request.body = ""
+      request.body = "".dup
       request.body << File.read(config.config_json_file_path).delete("\r\n")
 
       response = client.request(request)
 
       response_body = begin
-        json_str = response&.read_body
+        json_str = response.try(:read_body)
         (json_str ? JSON.parse(json_str) : {}).with_indifferent_access
       end
 
@@ -47,8 +47,9 @@ module Remocon
       }
 
       request = Net::HTTP::Get.new(uri.request_uri, headers)
+      response = client.request(request)
 
-      client.request(request).header["etag"]
+      response.kind_of?(Net::HTTPOK) && response.header["etag"]
     end
 
     private

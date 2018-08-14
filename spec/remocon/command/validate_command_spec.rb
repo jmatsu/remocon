@@ -7,10 +7,6 @@ module Remocon
     describe Validate do
       let(:command) { Validate.new(options) }
 
-      before do
-        allow(command).to receive(:etag_errors).and_return([])
-      end
-
       context "a parameters file is not found" do
         let(:options) do
           {
@@ -74,7 +70,8 @@ module Remocon
             parameters: fixture_path("valid_parameters.yml"),
             conditions: fixture_path("valid_conditions.yml"),
             etag: fixture_path("etag_file"),
-            id: "dragon"
+            id: "dragon",
+            token: "valid_token"
           }
         end
 
@@ -83,11 +80,29 @@ module Remocon
           allow(STDERR).to receive(:puts)
         end
 
-        it "should print to stdout but not to stderr" do
-          expect(STDOUT).to receive(:puts)
-          expect(STDERR).not_to receive(:puts)
+        context "etags are mismatch" do
+          before do
+            allow(Remocon::Request).to receive(:fetch_etag).and_return("different")
+          end
 
-          command.run
+          it "should return an error" do
+            expect(command).to receive(:print_errors).with(any_args) do |errors|
+              expect(errors.any? { |e| e.kind_of?(ValidationError)}).to be_truthy
+            end
+
+            expect(command.run).to be_falsey
+          end
+        end
+
+        context "etags are same" do
+          before do
+            allow(Remocon::Request).to receive(:fetch_etag).and_return("XYZXYZXYZXYZ")
+          end
+
+          it "should not return any errors" do
+            expect(command).to receive(:print_errors).with([])
+            expect(command.run).to be_truthy
+          end
         end
       end
 
@@ -97,19 +112,21 @@ module Remocon
             parameters: fixture_path("invalid_parameters_1.yml"),
             conditions: fixture_path("valid_conditions.yml"),
             etag: fixture_path("etag_file"),
-            id: "dragon"
+            id: "dragon",
+            token: "valid_token"
           }
         end
 
         before do
-          allow(STDOUT).to receive(:puts)
-          allow(STDERR).to receive(:puts)
+          allow(Remocon::Request).to receive(:fetch_etag).and_return("XYZXYZXYZXYZ")
         end
 
-        it "should print to stderr" do
-          expect(STDERR).to receive(:puts)
+        it "should return an error" do
+          expect(command).to receive(:print_errors).with(any_args) do |errors|
+            expect(errors.any? { |e| e.kind_of?(ValidationError)}).to be_truthy
+          end
 
-          command.run
+          expect(command.run).to be_falsey
         end
       end
     end

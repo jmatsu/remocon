@@ -71,30 +71,6 @@ module Remocon
         write_to_files(conditions_yaml, parameters_yaml, etag)
       end
 
-      private
-
-      def write_to_files(conditions_yaml, parameters_yaml, etag)
-        File.open(config.conditions_file_path, "w+") do |f|
-          f.write(conditions_yaml)
-          f.flush
-        end
-
-        File.open(config.parameters_file_path, "w+") do |f|
-          f.write(parameters_yaml)
-          f.flush
-        end
-
-        File.open(config.config_json_file_path, "w+") do |f|
-          f.write(JSON.pretty_generate({ conditions: sort_conditions(conditions), parameters: sort_parameters(parameters) }))
-          f.flush
-        end
-
-        File.open(config.etag_file_path, "w+") do |f|
-          f.write(etag)
-          f.flush
-        end
-      end
-
       def conditions_diff(left, right)
         left_names = left.map { |c| c[:name] }
         right_names = right.map { |c| c[:name] }
@@ -158,6 +134,30 @@ module Remocon
         end
 
         [unchanged, added, changed, removed]
+      end
+
+      private
+
+      def write_to_files(conditions_yaml, parameters_yaml, etag)
+        File.open(config.conditions_file_path, "w+") do |f|
+          f.write(conditions_yaml)
+          f.flush
+        end
+
+        File.open(config.parameters_file_path, "w+") do |f|
+          f.write(parameters_yaml)
+          f.flush
+        end
+
+        File.open(config.config_json_file_path, "w+") do |f|
+          f.write(JSON.pretty_generate({ conditions: sort_conditions(conditions), parameters: sort_parameters(parameters) }))
+          f.flush
+        end
+
+        File.open(config.etag_file_path, "w+") do |f|
+          f.write(etag)
+          f.flush
+        end
       end
     end
   end

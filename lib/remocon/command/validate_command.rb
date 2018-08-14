@@ -1,4 +1,4 @@
-# frozen_string_literal: false
+# frozen_string_literal: true
 
 module Remocon
   module Command
@@ -25,6 +25,12 @@ module Remocon
 
         errors = parameter_errors + condition_errors + etag_errors
 
+        print_errors(errors)
+
+        errors.empty?
+      end
+
+      def print_errors(errors)
         if errors.empty?
           STDOUT.puts "No error was found."
         else
@@ -33,8 +39,6 @@ module Remocon
             STDERR.puts e.backtrace&.join("\n")
           end
         end
-
-        errors.empty?
       end
 
       private
@@ -51,7 +55,7 @@ module Remocon
 
       def etag_errors
         if config.etag != remote_etag
-          [ StandardError.new("#{config.etag} is found but the latest etag is #{remote_etag}") ]
+          [ ValidationError.new("#{config.etag} is found but the latest etag is #{remote_etag || "none"}") ]
         else
           []
         end
