@@ -2,10 +2,12 @@
 
 # Remocon
 
-*remocon* is a CLI for Firebase Remote Config via its REST API.  
-Conditions and parameters are managed by YAML files.
+*remocon* is a CLI for Firebase Remote Config via its REST API. Conditions and parameters are managed by YAML files.
+The goal of this gem is Remote Config as a Code. :)
 
-*This is still in beta. A diff mode should be supported when managing configs heavily.*
+*Now conditions cannot be updated via API so that you can modify only parameters.*
+
+If you'd like to use this on CircleCI, you can use https://github.com/jmatsu/remocon-starter-kit . 
 
 ## Usage
 
@@ -41,7 +43,7 @@ FIREBASE_PROJECT_ID and REMOTE_CONFIG_ACCESS_TOKEN are supported but they are de
 
 ### Edit configs on your local
 
-Condition definitions and parameter definitions are separated. You should modify these files.
+Condition definitions and parameter definitions are separated. You need to modify these files.
 
 *parameters.yml*
 
