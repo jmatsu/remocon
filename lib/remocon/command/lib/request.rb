@@ -14,7 +14,7 @@ module Remocon
       }
 
       request = Net::HTTP::Put.new(uri.request_uri, headers)
-      request.body = "".dup
+      request.body = +""
       request.body << File.read(config.config_json_file_path).delete("\r\n")
 
       response = client.request(request)
@@ -51,8 +51,6 @@ module Remocon
 
       response.kind_of?(Net::HTTPOK) && response.header["etag"]
     end
-
-    private
 
     def self.build_client(config)
       uri = URI.parse(config.endpoint)

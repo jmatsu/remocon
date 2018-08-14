@@ -87,7 +87,7 @@ module Remocon
 
           it "should return an error" do
             expect(command).to receive(:print_errors).with(any_args) do |errors|
-              expect(errors.any? { |e| e.kind_of?(ValidationError)}).to be_truthy
+              expect(errors.any? { |e| e.kind_of?(ValidationError) }).to be_truthy
             end
 
             expect(command.run).to be_falsey
@@ -123,7 +123,7 @@ module Remocon
 
         it "should return an error" do
           expect(command).to receive(:print_errors).with(any_args) do |errors|
-            expect(errors.any? { |e| e.kind_of?(ValidationError)}).to be_truthy
+            expect(errors.any? { |e| e.kind_of?(ValidationError) }).to be_truthy
           end
 
           expect(command.run).to be_falsey

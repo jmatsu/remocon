@@ -1,0 +1,10 @@
+---
+- name: unchanged_condition
+  expression: device.os == 'ios'
+  tagColor: INDIGO
+- name: changed_condition
+  expression: device.os == 'android'
+  tagColor: CYAN
+- name: will_be_removed_condition
+  expression: device.os == 'ios'
+  tagColor: CYAN

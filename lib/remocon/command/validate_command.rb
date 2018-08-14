@@ -55,7 +55,7 @@ module Remocon
 
       def etag_errors
         if config.etag != remote_etag
-          [ ValidationError.new("#{config.etag} is found but the latest etag is #{remote_etag || "none"}") ]
+          [ValidationError.new("#{config.etag} is found but the latest etag is #{remote_etag || 'none'}")]
         else
           []
         end

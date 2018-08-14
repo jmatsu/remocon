@@ -4,7 +4,6 @@ require "spec_helper"
 
 module Remocon
   describe Request do
-
     let(:opts) { { id: "fixture", "raw-etag": "raw_etag", token: "valid_token", prefix: "spec" } }
     let(:config) { Config.new(opts) }
 
@@ -17,10 +16,10 @@ module Remocon
       it "should send a json request with an etag and a token" do
         expect(Net::HTTP::Put).to receive(:new).with(URI.parse("https://firebaseremoteconfig.googleapis.com/v1/projects/fixture/remoteConfig").request_uri, any_args) do |_, headers|
           expect(headers).to include(
-                                 "Authorization" => "Bearer valid_token",
-                                 "Content-Type" => "application/json; UTF8",
-                                 "If-Match" => "raw_etag",
-                                 )
+            "Authorization" => "Bearer valid_token",
+            "Content-Type" => "application/json; UTF8",
+            "If-Match" => "raw_etag"
+          )
         end.and_call_original
 
         Request.push(config)
@@ -41,10 +40,10 @@ module Remocon
       it "should send a compressed json request with a token" do
         expect(Net::HTTP::Get).to receive(:new).with(URI.parse("https://firebaseremoteconfig.googleapis.com/v1/projects/fixture/remoteConfig").request_uri, any_args) do |_, headers|
           expect(headers).to include(
-                                     "Authorization" => "Bearer valid_token",
-                                     "Content-Type" => "application/json; UTF8",
-                                     "Content-Encoding" => "gzip",
-                                 )
+            "Authorization" => "Bearer valid_token",
+            "Content-Type" => "application/json; UTF8",
+            "Content-Encoding" => "gzip"
+          )
         end.and_call_original
 
         Request.fetch_etag(config)

@@ -11,7 +11,6 @@ module Remocon
       end
 
       def run
-        # to prevent a real request in spec
         do_request
       end
 

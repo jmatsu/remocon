@@ -21,7 +21,7 @@ module Remocon
         end
 
         def raw_conditions
-          YAML.safe_load(File.open(require_conditions_file_path).read)
+          YAML.safe_load(File.open(require_conditions_file_path).read).map(&:with_indifferent_access)
         end
 
         def raw_parameters
@@ -110,7 +110,7 @@ module Remocon
         removed_keys = left.keys - right.keys
 
         added = added_keys.each_with_object({}) do |k, acc|
-          acc[k] = right[k]
+          acc.merge!(Remocon::ParameterFileDumper.new({ k => right[k] }).dump)
         end
 
         changed = {}

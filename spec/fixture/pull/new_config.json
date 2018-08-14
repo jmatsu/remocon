@@ -1,0 +1,49 @@
+{
+  "conditions": [
+    {
+      "name": "unchanged_condition",
+      "expression": "device.os == 'ios'",
+      "tagColor": "INDIGO"
+    },
+    {
+      "name": "changed_condition",
+      "expression": "device.os == 'ios'",
+      "tagColor": "CYAN"
+    },
+    {
+      "name": "added_condition",
+      "expression": "device.os == 'android'",
+      "tagColor": "INDIGO"
+    }
+  ],
+  "parameters": {
+    "changed_parameter": {
+      "defaultValue": {
+        "value": "100"
+      },
+      "conditionalValues": {
+        "unchanged_condition": {
+          "value": "200"
+        }
+      }
+    },
+    "unchanged_parameter": {
+      "defaultValue": {
+        "value": "100"
+      },
+      "conditionalValues": {
+        "unchanged_condition": {
+          "value": "100"
+        },
+        "changed_condition": {
+          "value": "300"
+        }
+      }
+    },
+    "added_parameter": {
+      "defaultValue": {
+        "value": "1230947"
+      }
+    }
+  }
+}
