@@ -52,6 +52,11 @@ module Remocon
       execute(Remocon::Command::Validate)
     end
 
+    desc "version", "Show remocon version"
+    def version
+      puts Remocon::VERSION
+    end
+
     private
 
     def execute(klass)
