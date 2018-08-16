@@ -4,6 +4,18 @@ require "spec_helper"
 
 module Remocon
   describe ParameterSorter do
+
+    def to_a(x)
+      case x
+        when Hash
+          to_a(x.to_a)
+        when Array
+          x.map { |a| to_a(a) }
+        else
+          x
+      end
+    end
+
     let(:sorter) { Struct.new(:dummy) { include Remocon::ParameterSorter }.new }
     let(:target) do
       {
@@ -51,11 +63,48 @@ module Remocon
       }
     end
 
+    context "#sort_conditions" do
+      let(:conditions) {
+        {
+            "xyz" => {
+                normalizer: "json",
+                value: "xyz value"
+            },
+            "abc" => {
+                value: "abc value",
+                normalizer: "integer",
+            },
+            "mute" => {
+                normalizer: "integer",
+                value: "mute value",
+            },
+            "curry" => {
+                value: "curry value",
+                normalizer: "integer",
+            },
+            "abc123" => {
+                normalizer: "integer",
+                value: "abc123 value",
+            }
+        }
+      }
+
+      it "shouldn't sort keys" do
+        sorted_conditions = sorter.sort_conditions(conditions)
+
+        keys = %w(xyz abc mute curry abc123)
+
+        sorted_conditions.each_with_index do |(key, _), index|
+          expect(key).to eq(keys[index])
+        end
+      end
+    end
+
     context "#sort_parameters" do
       it "should sort" do
         sorted_target = sorter.sort_parameters(target)
 
-        expect(sorted_target).to eq({
+        expect(to_a(sorted_target)).to eq(to_a({
           key1: {
             description: "example example example",
             value: "value",
@@ -98,18 +147,7 @@ module Remocon
             }
           }
 
-        }.deep_stringify_keys)
-
-        sorted_target["key3"]["conditions"].each_with_index do |(key, hash), index|
-          case index
-            when 0
-              expect(key).to eq("cond2")
-              expect(hash).to eq("value" => "cond2 value")
-            when 1
-              expect(key).to eq("cond1")
-              expect(hash).to eq("value" => "cond1 value")
-          end
-        end
+        }.deep_stringify_keys))
       end
     end
   end
