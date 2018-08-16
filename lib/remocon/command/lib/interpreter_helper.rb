@@ -2,7 +2,6 @@
 
 module Remocon
   module InterpreterHelper
-
     def cmd_opts
       raise NotImplementedError
     end
