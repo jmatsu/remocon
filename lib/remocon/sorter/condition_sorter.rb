@@ -12,9 +12,8 @@ module Remocon
       conditions
         .sort_by { |e| e["name"] || e[:name] }
         .map do |e|
-        e.stringify_keys.sort do |(a, _), (b, _)|
-          comparator_of_condition_keys(a, b)
-        end.each_with_object({}) do |(k, v), acc|
+        e.stringify_keys.sort { |(a, _), (b, _)| comparator_of_condition_keys(a, b) }
+            .each_with_object({}) do |(k, v), acc|
           acc[k] = v
         end.with_indifferent_access
       end

@@ -4,15 +4,14 @@ require "spec_helper"
 
 module Remocon
   describe ParameterSorter do
-
     def to_a(x)
       case x
-        when Hash
-          to_a(x.to_a)
-        when Array
-          x.map { |a| to_a(a) }
-        else
-          x
+      when Hash
+        to_a(x.to_a)
+      when Array
+        x.map { |a| to_a(a) }
+      else
+        x
       end
     end
 
@@ -64,7 +63,7 @@ module Remocon
     end
 
     context "#sort_conditions_of_parameters" do
-      let(:conditions) {
+      let(:conditions) do
         {
             "xyz" => {
                 normalizer: "json",
@@ -87,7 +86,7 @@ module Remocon
                 value: "abc123 value",
             }
         }
-      }
+      end
 
       it "shouldn't sort keys" do
         sorted_conditions = sorter.sort_conditions_of_parameters(conditions)
