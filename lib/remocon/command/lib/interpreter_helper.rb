@@ -2,8 +2,6 @@
 
 module Remocon
   module InterpreterHelper
-    include Remocon::ConditionSorter
-    include Remocon::ParameterSorter
 
     def cmd_opts
       raise NotImplementedError

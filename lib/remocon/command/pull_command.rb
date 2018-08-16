@@ -30,6 +30,8 @@ module Remocon
       end
 
       include Remocon::InterpreterHelper
+      include Remocon::ConditionSorter
+      include Remocon::ParameterSorter
 
       attr_reader :config, :cmd_opts, :left
 
