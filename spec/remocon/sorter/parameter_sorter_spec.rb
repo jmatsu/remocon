@@ -53,7 +53,9 @@ module Remocon
 
     context "#sort_parameters" do
       it "should sort" do
-        expect(sorter.sort_parameters(target)).to eq({
+        sorted_target = sorter.sort_parameters(target)
+
+        expect(sorted_target).to eq({
           key1: {
             description: "example example example",
             value: "value",
@@ -82,11 +84,11 @@ module Remocon
             file: "file",
             normalizer: "json",
             conditions: {
-              "cond1" => {
-                value: "cond1 value"
-              },
               "cond2" => {
                 value: "cond2 value"
+              },
+              "cond1" => {
+                  value: "cond1 value"
               }
             },
             options: {
@@ -97,6 +99,17 @@ module Remocon
           }
 
         }.deep_stringify_keys)
+
+        sorted_target["key3"]["conditions"].each_with_index do |(key, hash), index|
+          case index
+            when 0
+              expect(key).to eq("cond2")
+              expect(hash).to eq("value" => "cond2 value")
+            when 1
+              expect(key).to eq("cond1")
+              expect(hash).to eq("value" => "cond1 value")
+          end
+        end
       end
     end
   end
