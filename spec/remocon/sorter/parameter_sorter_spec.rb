@@ -63,7 +63,7 @@ module Remocon
       }
     end
 
-    context "#sort_conditions" do
+    context "#sort_conditions_of_parameters" do
       let(:conditions) {
         {
             "xyz" => {
@@ -90,7 +90,7 @@ module Remocon
       }
 
       it "shouldn't sort keys" do
-        sorted_conditions = sorter.sort_conditions(conditions)
+        sorted_conditions = sorter.sort_conditions_of_parameters(conditions)
 
         keys = %w(xyz abc mute curry abc123)
 

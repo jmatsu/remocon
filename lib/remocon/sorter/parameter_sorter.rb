@@ -19,7 +19,7 @@ module Remocon
                        .sort { |(a, _), (b, _)| comparator_of_parameter_keys(a, b) }
                        .each_with_object({}) do |(inside_key, _), inside_acc|
           if inside_key == "conditions"
-            inside_acc[inside_key] = sort_conditions(param[inside_key])
+            inside_acc[inside_key] = sort_conditions_of_parameters(param[inside_key])
           else
             inside_acc[inside_key] = param[inside_key]
           end
@@ -27,7 +27,7 @@ module Remocon
       end.with_indifferent_access
     end
 
-    def sort_conditions(conditions)
+    def sort_conditions_of_parameters(conditions)
       conditions.with_indifferent_access.to_a.each_with_object({}) do |(k, v), acc|
         acc[k] = v.stringify_keys
                      .sort { |(a, _), (b, _)| comparator_of_parameter_keys(a, b) }
