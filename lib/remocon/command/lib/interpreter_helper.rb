@@ -2,9 +2,6 @@
 
 module Remocon
   module InterpreterHelper
-    include Remocon::ConditionSorter
-    include Remocon::ParameterSorter
-
     def cmd_opts
       raise NotImplementedError
     end
@@ -25,7 +22,7 @@ module Remocon
     end
 
     def parameter_hash
-      @parameter_hash ||= sort_parameters(read_parameters.first)
+      @parameter_hash ||= read_parameters.first
     end
 
     def read_conditions
@@ -36,7 +33,7 @@ module Remocon
     end
 
     def condition_array
-      @condition_array ||= sort_conditions(read_conditions.first)
+      @condition_array ||= read_conditions.first
     end
 
     def condition_names
