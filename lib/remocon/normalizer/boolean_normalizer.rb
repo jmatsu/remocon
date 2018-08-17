@@ -7,8 +7,6 @@ module Remocon
     end
 
     def validate
-      return if [FalseClass, TrueClass].include?(@content.class)
-
       begin
         @bool_val = @content.to_s.to_boolean
       rescue ArgumentError => e
