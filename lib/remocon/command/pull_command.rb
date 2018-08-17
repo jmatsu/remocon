@@ -126,7 +126,7 @@ module Remocon
         removed = {}
 
         removed_keys.each do |k|
-          removed[k] = left[k]
+          removed[k] = Remocon::ParameterFileDumper.new({ k => left[k] }).dump
         end
 
         [unchanged, added, changed, removed]

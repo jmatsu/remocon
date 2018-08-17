@@ -215,7 +215,6 @@ module Remocon
         end
 
         it "should calculate removed diffs" do
-          # un-dump has not implemented yet so the returned format is from yaml files
           _, _, _, removed = command.parameters_diff(local_configs.parameters_to_be_compared, new_config_json[:parameters])
 
           expect(local_configs.parameters_to_be_compared.keys).to include("will_be_removed_parameter")
@@ -223,9 +222,7 @@ module Remocon
           expect(removed.size).to eq(1)
           expect(removed).to include(
             "will_be_removed_parameter" => {
-                "defaultValue" => {
-                    "value" => "123",
-                },
+                "value" => "123",
             }
           )
         end
