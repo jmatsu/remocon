@@ -6,10 +6,11 @@ module Remocon
       class RemoteConfig
         include Remocon::InterpreterHelper
 
-        attr_reader :config
+        attr_reader :config, :cmd_opts
 
         def initialize(opts)
           @config = Remocon::Config.new(opts)
+          @cmd_opts = { validate_only: false }
         end
 
         def require_parameters_file_path
@@ -20,16 +21,15 @@ module Remocon
           config.conditions_file_path
         end
 
-        def raw_conditions
-          YAML.safe_load(File.open(require_conditions_file_path).read).map(&:with_indifferent_access)
+        def conditions_to_be_compared
+          JSON.parse(JSON.pretty_generate(condition_array.map { |c| c.skip_nil_values.stringify_values })).map(&:with_indifferent_access)
         end
 
-        def raw_parameters
-          YAML.safe_load(File.open(require_parameters_file_path).read).with_indifferent_access
+        def parameters_to_be_compared
+          JSON.parse(JSON.pretty_generate(parameter_hash.skip_nil_values.stringify_values)).with_indifferent_access
         end
       end
 
-      include Remocon::InterpreterHelper
       include Remocon::ConditionSorter
       include Remocon::ParameterSorter
 
@@ -39,14 +39,6 @@ module Remocon
         @config = Remocon::Config.new(opts)
         @cmd_opts = { validate_only: false }
         @left = RemoteConfig.new(opts)
-      end
-
-      def require_parameters_file_path
-        config.parameters_file_path
-      end
-
-      def require_conditions_file_path
-        config.conditions_file_path
       end
 
       def run
@@ -60,8 +52,8 @@ module Remocon
         parameters = raw_hash[:parameters] || {}
 
         if config.merge? && File.exist?(config.parameters_file_path) && File.exist?(config.parameters_file_path)
-          unchanged_conditions, added_conditions, changed_conditions, = conditions_diff(left.raw_conditions, conditions)
-          unchanged_parameters, added_parameters, changed_parameters, = parameters_diff(left.raw_parameters, parameters)
+          unchanged_conditions, added_conditions, changed_conditions, = conditions_diff(left.conditions_to_be_compared, conditions)
+          unchanged_parameters, added_parameters, changed_parameters, = parameters_diff(left.parameters_to_be_compared, parameters)
 
           conditions_yaml = JSON.parse(sort_conditions(unchanged_conditions + added_conditions + changed_conditions).to_json).to_yaml
           parameters_yaml = JSON.parse(sort_parameters(unchanged_parameters.merge(added_parameters).merge(changed_parameters)).to_json).to_yaml
@@ -89,12 +81,12 @@ module Remocon
 
         (right_names & left_names).each do |k|
           old = left.find { |c| c[:name] == k }
-          new = Remocon::ConditionFileDumper.new(right.find { |c| c[:name] == k }).dump
+          new = right.find { |c| c[:name] == k }
 
           if old == new
             unchanged.push(old)
           else
-            changed.push(new)
+            changed.push(Remocon::ConditionFileDumper.new(new).dump)
           end
         end
 
@@ -119,20 +111,20 @@ module Remocon
         unchanged = {}
 
         (right.keys & left.keys).each do |k|
-          old = { k => left[k] }
-          new = Remocon::ParameterFileDumper.new({ k => right[k] }).dump
+          # both of left and right is config json's format
+          # comparison should be done based on the format but dumped format should be returned
+          old = left[k]
+          new = right[k]
 
           if old == new
-            unchanged.merge!(old)
+            unchanged.merge!(Remocon::ParameterFileDumper.new({ k => old }).dump)
           else
-            changed.merge!(new)
+            changed.merge!(Remocon::ParameterFileDumper.new({ k => new }).dump)
           end
         end
 
-        removed = {}
-
-        removed_keys.each do |k|
-          removed[k] = left[k]
+        removed = removed_keys.each_with_object({}) do |k, acc|
+          acc.merge!(Remocon::ParameterFileDumper.new({ k => left[k] }).dump)
         end
 
         [unchanged, added, changed, removed]

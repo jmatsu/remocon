@@ -3,7 +3,7 @@
 class Hash
   def skip_nil_values
     dup.compact.each_with_object({}) do |(k, v), acc|
-      next unless v
+      next if v.nil?
       acc[k] = case v
                when Hash
                  v.skip_nil_values

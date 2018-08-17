@@ -44,6 +44,16 @@
       "defaultValue": {
         "value": "1230947"
       }
+    },
+    "unchanged_normalizer_parameter": {
+      "defaultValue": {
+        "value": "123"
+      }
+    },
+    "changed_normalizer_parameter": {
+      "defaultValue": {
+        "value": "true"
+      }
     }
   }
 }
