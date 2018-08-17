@@ -13,72 +13,72 @@ module Remocon
       describe Pull::RemoteConfig do
         it "#conditions_to_be_compared" do
           expect(local_configs.conditions_to_be_compared).to eq(
-                                                                 [
-                                                                     {
-                                                                         "name" => "unchanged_condition",
-                                                                         "expression" => "device.os == 'ios'",
-                                                                         "tagColor" => "INDIGO",
-                                                                     },
-                                                                     {
-                                                                         "name" => "changed_condition",
-                                                                         "expression" => "device.os == 'android'",
-                                                                         "tagColor" => "CYAN",
-                                                                     },
-                                                                     {
-                                                                         "name" => "will_be_removed_condition",
-                                                                         "expression" => "device.os == 'ios'",
-                                                                         "tagColor" => "CYAN",
-                                                                     },
-                                                                 ]
-                                                             )
+            [
+              {
+                    "name" => "unchanged_condition",
+                    "expression" => "device.os == 'ios'",
+                    "tagColor" => "INDIGO",
+                },
+              {
+                  "name" => "changed_condition",
+                  "expression" => "device.os == 'android'",
+                  "tagColor" => "CYAN",
+              },
+              {
+                  "name" => "will_be_removed_condition",
+                  "expression" => "device.os == 'ios'",
+                  "tagColor" => "CYAN",
+              },
+            ]
+          )
         end
 
         it "#parameters_to_be_compared" do
           expect(local_configs.parameters_to_be_compared).to eq(
-                                                                   {
-                                                                       "changed_parameter" => {
-                                                                           "defaultValue" => {
-                                                                               "value" => "100"
-                                                                           },
-                                                                           "conditionalValues" => {
-                                                                               "unchanged_condition" => {
-                                                                                   "value" => "200"
-                                                                               },
-                                                                               "will_be_removed_condition" => {
-                                                                                   "value" => "100"
-                                                                               }
-                                                                           }
-                                                                       },
-                                                                       "unchanged_parameter" => {
-                                                                           "defaultValue" => {
-                                                                               "value" => "100"
-                                                                           },
-                                                                           "conditionalValues" => {
-                                                                               "unchanged_condition" => {
-                                                                                   "value" => "100"
-                                                                               },
-                                                                               "changed_condition" => {
-                                                                                   "value" => "300"
-                                                                               },
-                                                                           }
-                                                                       },
-                                                                       "will_be_removed_parameter" => {
-                                                                           "defaultValue" => {
-                                                                               "value" => "123"
-                                                                           }
-                                                                       },
-                                                                       "unchanged_normalizer_parameter" => {
-                                                                           "defaultValue" => {
-                                                                               "value" => "123"
-                                                                           }
-                                                                       },
-                                                                       "changed_normalizer_parameter" => {
-                                                                           "defaultValue" => {
-                                                                               "value" => "false"
-                                                                           }
-                                                                       },
-                                                                   }
-                                                             )
+            {
+                "changed_parameter" => {
+                    "defaultValue" => {
+                        "value" => "100"
+                    },
+                    "conditionalValues" => {
+                        "unchanged_condition" => {
+                            "value" => "200"
+                        },
+                        "will_be_removed_condition" => {
+                            "value" => "100"
+                        }
+                    }
+                },
+                "unchanged_parameter" => {
+                    "defaultValue" => {
+                        "value" => "100"
+                    },
+                    "conditionalValues" => {
+                        "unchanged_condition" => {
+                            "value" => "100"
+                        },
+                        "changed_condition" => {
+                            "value" => "300"
+                        },
+                    }
+                },
+                "will_be_removed_parameter" => {
+                    "defaultValue" => {
+                        "value" => "123"
+                    }
+                },
+                "unchanged_normalizer_parameter" => {
+                    "defaultValue" => {
+                        "value" => "123"
+                    }
+                },
+                "changed_normalizer_parameter" => {
+                    "defaultValue" => {
+                        "value" => "false"
+                    }
+                },
+            }
+          )
         end
       end
 

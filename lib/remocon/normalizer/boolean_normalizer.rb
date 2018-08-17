@@ -7,11 +7,9 @@ module Remocon
     end
 
     def validate
-      begin
-        @bool_val = @content.to_s.to_boolean
-      rescue ArgumentError => e
-        raise ValidationError, e.message
-      end
+      @bool_val = @content.to_s.to_boolean
+    rescue ArgumentError => e
+      raise ValidationError, e.message
     end
 
     def normalize

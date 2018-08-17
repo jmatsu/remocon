@@ -113,7 +113,7 @@ module Remocon
         (right.keys & left.keys).each do |k|
           # both of left and right is config json's format
           # comparison should be done based on the format but dumped format should be returned
-          old =  left[k]
+          old = left[k]
           new = right[k]
 
           if old == new
