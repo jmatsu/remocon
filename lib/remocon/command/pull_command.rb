@@ -123,10 +123,8 @@ module Remocon
           end
         end
 
-        removed = {}
-
-        removed_keys.each do |k|
-          removed[k] = Remocon::ParameterFileDumper.new({ k => left[k] }).dump
+        removed = removed_keys.each_with_object({}) do |k, acc|
+          acc.merge!(Remocon::ParameterFileDumper.new({ k => left[k] }).dump)
         end
 
         [unchanged, added, changed, removed]
