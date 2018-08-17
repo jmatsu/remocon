@@ -77,9 +77,9 @@ module Remocon
         it "should calculate diffs" do
           unchanged, added, changed, removed = command.parameters_diff(local_configs.raw_parameters, new_config_json[:parameters])
 
-          expect(unchanged.size).to eq(1)
+          expect(unchanged.size).to eq(2)
           expect(added.size).to eq(1)
-          expect(changed.size).to eq(1)
+          expect(changed.size).to eq(2)
           expect(removed.size).to eq(1)
         end
 
@@ -91,15 +91,18 @@ module Remocon
           expect(unchanged.size).to eq(1)
           expect(unchanged).to include(
             "unchanged_parameter" => {
-            "value" => "100",
-            "conditions" => {
-                "unchanged_condition" => {
-                    "value" => "100"
-                },
-                "changed_condition" => {
-                    "value" => "300"
+                "value" => "100",
+                "conditions" => {
+                    "unchanged_condition" => {
+                        "value" => "100"
+                    },
+                    "changed_condition" => {
+                        "value" => "300"
+                    }
                 }
-            }
+            },
+            "unchanged_normalizer_parameter" => {
+                "value" => "123"
             }
           )
         end
@@ -132,7 +135,10 @@ module Remocon
                       "value" => "200"
                   }
               }
-          }
+            },
+            "changed_normalizer_parameter" => {
+                "value" => "true"
+            }
           )
         end
 

@@ -15,3 +15,9 @@ unchanged_parameter:
       value: '300'
 will_be_removed_parameter:
   value: '123'
+unchanged_normalizer_parameter:
+  value: 123
+  normalizer: integer
+changed_normalizer_parameter:
+  value: false
+  normalizer: boolean
