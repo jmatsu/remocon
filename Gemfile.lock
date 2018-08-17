@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    remocon (0.4.2)
+    remocon (0.4.3)
       activesupport
       googleauth
       thor
