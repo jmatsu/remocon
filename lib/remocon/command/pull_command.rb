@@ -51,6 +51,7 @@ module Remocon
 
         conditions = raw_hash[:conditions] || []
         parameters = raw_hash[:parameters] || {}
+        versions = raw_hash[:versions] || {}
 
         if config.merge? && File.exist?(config.parameters_file_path) && File.exist?(config.parameters_file_path)
           unchanged_conditions, added_conditions, changed_conditions, = conditions_diff(left.conditions_to_be_compared, conditions)
@@ -63,7 +64,7 @@ module Remocon
           parameters_hash = JSON.parse(sort_parameters(Remocon::ParameterFileDumper.new(parameters).dump).to_json)
         end
 
-        write_to_files(conditions_array, parameters_hash, etag)
+        write_to_files(conditions_array, parameters_hash, versions, etag)
       end
 
       def conditions_diff(left, right)
@@ -133,7 +134,7 @@ module Remocon
 
       private
 
-      def write_to_files(conditions_array, parameters_hash, etag)
+      def write_to_files(conditions_array, parameters_hash, versions, etag)
         File.open(config.conditions_file_path, "w+") do |f|
           f.write(conditions_array.to_yaml)
           f.flush
@@ -141,6 +142,11 @@ module Remocon
 
         File.open(config.parameters_file_path, "w+") do |f|
           f.write(parameters_hash.to_yaml)
+          f.flush
+        end
+
+        File.open(config.version_file_path, "w+") do |f|
+          f.write(JSON.pretty_generate(JSON.parse(versions.to_json)))
           f.flush
         end
 
