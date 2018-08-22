@@ -9,6 +9,9 @@ The goal of this gem is Remote Config as a Code. :)
 
 If you'd like to use this on CircleCI, you can use https://github.com/jmatsu/remocon-starter-kit . 
 
+NOTE:
+v0.4.4 and lower versions contain serious bugs. Please use 0.5.0 or greater, sorry.
+
 ## Usage
 
 ### Get your access token
