@@ -10,6 +10,7 @@ module Remocon
     CONFIG_JSON_FILE = "config.json"
     CONDITIONS_FILE_NAME = "conditions.yml"
     PARAMETERS_FILE_NAME = "parameters.yml"
+    VERSION_FILE_NAME = "version.json"
     ETAG_FILE_NAME = "etag"
 
     attr_reader :opts
@@ -65,6 +66,10 @@ module Remocon
       @parameters_file_path ||= opts[:parameters] || begin
         File.join(project_dir_path, PARAMETERS_FILE_NAME)
       end
+    end
+
+    def version_file_path
+      @version_file_path = File.join(project_dir_path, VERSION_FILE_NAME)
     end
 
     def etag_file_path

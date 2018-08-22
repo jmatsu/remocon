@@ -25,7 +25,7 @@ module Remocon
 
         artifact = {
           conditions: condition_array,
-          parameters: parameter_hash
+          parameters: parameter_hash,
         }.skip_nil_values.stringify_values
 
         File.open(config.config_json_file_path, "w+") do |f|
