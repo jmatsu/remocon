@@ -55,11 +55,11 @@ module Remocon
           unchanged_conditions, added_conditions, changed_conditions, = conditions_diff(left.conditions_to_be_compared, conditions)
           unchanged_parameters, added_parameters, changed_parameters, = parameters_diff(left.parameters_to_be_compared, parameters)
 
-          conditions_yaml = JSON.parse(sort_conditions(unchanged_conditions + added_conditions + changed_conditions).to_json).to_yaml
-          parameters_yaml = JSON.parse(sort_parameters(unchanged_parameters.merge(added_parameters).merge(changed_parameters)).to_json).to_yaml
+          conditions_yaml = JSON.parse(sort_conditions(unchanged_conditions + added_conditions + changed_conditions).to_json)
+          parameters_yaml = JSON.parse(sort_parameters(unchanged_parameters.merge(added_parameters).merge(changed_parameters)).to_json)
         else
-          conditions_yaml = JSON.parse(sort_conditions(Remocon::ConditionFileDumper.new(conditions).dump).to_json).to_yaml
-          parameters_yaml = JSON.parse(sort_parameters(Remocon::ParameterFileDumper.new(parameters).dump).to_json).to_yaml
+          conditions_yaml = JSON.parse(sort_conditions(Remocon::ConditionFileDumper.new(conditions).dump).to_json)
+          parameters_yaml = JSON.parse(sort_parameters(Remocon::ParameterFileDumper.new(parameters).dump).to_json)
         end
 
         write_to_files(conditions_yaml, parameters_yaml, etag)
@@ -132,19 +132,19 @@ module Remocon
 
       private
 
-      def write_to_files(conditions_yaml, parameters_yaml, etag)
+      def write_to_files(conditions_array, parameters_hash, etag)
         File.open(config.conditions_file_path, "w+") do |f|
-          f.write(conditions_yaml)
+          f.write(conditions_array.to_yaml)
           f.flush
         end
 
         File.open(config.parameters_file_path, "w+") do |f|
-          f.write(parameters_yaml)
+          f.write(parameters_hash.to_yaml)
           f.flush
         end
 
         File.open(config.config_json_file_path, "w+") do |f|
-          f.write(JSON.pretty_generate({ conditions: conditions_yaml, parameters: parameters_yaml }))
+          f.write(JSON.pretty_generate({ conditions: conditions_array, parameters: parameters_hash }))
           f.flush
         end
 
