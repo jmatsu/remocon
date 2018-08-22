@@ -33,12 +33,13 @@ module Remocon
       include Remocon::ConditionSorter
       include Remocon::ParameterSorter
 
-      attr_reader :config, :cmd_opts, :left
+      attr_reader :config, :cmd_opts, :left, :create_command
 
       def initialize(opts)
         @config = Remocon::Config.new(opts)
         @cmd_opts = { validate_only: false }
         @left = RemoteConfig.new(opts)
+        @create_command = Remocon::Command::Create.new(opts)
       end
 
       def run
@@ -143,15 +144,12 @@ module Remocon
           f.flush
         end
 
-        File.open(config.config_json_file_path, "w+") do |f|
-          f.write(JSON.pretty_generate({ conditions: conditions_array, parameters: parameters_hash }))
-          f.flush
-        end
-
         File.open(config.etag_file_path, "w+") do |f|
           f.write(etag)
           f.flush
         end
+
+        create_command.run
       end
     end
   end
