@@ -58,8 +58,8 @@ module Remocon
           conditions_yaml = JSON.parse(sort_conditions(unchanged_conditions + added_conditions + changed_conditions).to_json).to_yaml
           parameters_yaml = JSON.parse(sort_parameters(unchanged_parameters.merge(added_parameters).merge(changed_parameters)).to_json).to_yaml
         else
-          conditions_yaml = JSON.parse(Remocon::ConditionFileDumper.new(sort_conditions(conditions)).dump.to_json).to_yaml
-          parameters_yaml = JSON.parse(Remocon::ParameterFileDumper.new(sort_parameters(parameters)).dump.to_json).to_yaml
+          conditions_yaml = JSON.parse(sort_conditions(Remocon::ConditionFileDumper.new(conditions).dump).to_json).to_yaml
+          parameters_yaml = JSON.parse(sort_parameters(Remocon::ParameterFileDumper.new(parameters).dump).to_json).to_yaml
         end
 
         write_to_files(conditions_yaml, parameters_yaml, etag)
@@ -144,7 +144,7 @@ module Remocon
         end
 
         File.open(config.config_json_file_path, "w+") do |f|
-          f.write(JSON.pretty_generate({ conditions: condition_array, parameters: parameter_hash }))
+          f.write(JSON.pretty_generate({ conditions: conditions_yaml, parameters: parameters_yaml }))
           f.flush
         end
 
