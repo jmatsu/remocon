@@ -55,14 +55,14 @@ module Remocon
           unchanged_conditions, added_conditions, changed_conditions, = conditions_diff(left.conditions_to_be_compared, conditions)
           unchanged_parameters, added_parameters, changed_parameters, = parameters_diff(left.parameters_to_be_compared, parameters)
 
-          conditions_yaml = JSON.parse(sort_conditions(unchanged_conditions + added_conditions + changed_conditions).to_json)
-          parameters_yaml = JSON.parse(sort_parameters(unchanged_parameters.merge(added_parameters).merge(changed_parameters)).to_json)
+          conditions_array = JSON.parse(sort_conditions(unchanged_conditions + added_conditions + changed_conditions).to_json)
+          parameters_hash = JSON.parse(sort_parameters(unchanged_parameters.merge(added_parameters).merge(changed_parameters)).to_json)
         else
-          conditions_yaml = JSON.parse(sort_conditions(Remocon::ConditionFileDumper.new(conditions).dump).to_json)
-          parameters_yaml = JSON.parse(sort_parameters(Remocon::ParameterFileDumper.new(parameters).dump).to_json)
+          conditions_array = JSON.parse(sort_conditions(Remocon::ConditionFileDumper.new(conditions).dump).to_json)
+          parameters_hash = JSON.parse(sort_parameters(Remocon::ParameterFileDumper.new(parameters).dump).to_json)
         end
 
-        write_to_files(conditions_yaml, parameters_yaml, etag)
+        write_to_files(conditions_array, parameters_hash, etag)
       end
 
       def conditions_diff(left, right)
